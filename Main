@@ -1,0 +1,68 @@
+package application;
+import java.util.Random;
+import java.util.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+
+
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        int nRow = 31;
+        int nCol = 31;
+        int cellSize = 20;
+
+        GridPane grid = new GridPane();
+        int[][] maze = new int[nRow][nCol];           //cree le labyrinthe c'est une matrice
+        Pane[][] squares = new Pane[nRow][nCol];      //pour chaque case de l'affichage du labyrinthe
+
+        
+        // Ajout des contraintes UNE FOIS
+        for (int i = 0; i < nCol; i++) {
+            grid.getColumnConstraints().add(new ColumnConstraints(cellSize));
+        }
+        for (int j = 0; j < nRow; j++) {
+            grid.getRowConstraints().add(new RowConstraints(cellSize));
+        }
+        
+        
+        // Remplir la grille
+        for (int j = 0; j < nRow; j++) {
+            for (int i = 0; i < nCol; i++) {
+            	if (i<nRow && j<nCol) {
+                    maze[j][i] = i + j;
+            	}
+                Pane square = new Pane();
+                square.setPrefSize(cellSize, cellSize);
+
+                // Definir la couleur selon la parité
+                if (i % 2 == 1 && j % 2 == 1) {
+                    square.setStyle("-fx-background-color: white;");
+                } else {
+                    square.setStyle("-fx-background-color: green;");
+                }
+                
+
+                squares[j][i] = square;
+                grid.add(square, i, j); // (colonne, ligne)
+            }
+        }
+        System.out.println(maze[0][0]);
+        
+        Random rand = new Random();
+        grid.setGridLinesVisible(true);
+ Scene scene = new Scene(grid,200, nRow * cellSize + 2);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Grille Labyrinthe");
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
