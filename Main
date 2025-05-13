@@ -1,65 +1,70 @@
 package application;
-import java.util.Random;
-import java.util.*;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.geometry.Insets;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) {
-        int nRow = 31;
-        int nCol = 31;
-        int cellSize = 20;
+        try {
+            BorderPane root = new BorderPane();
 
-        GridPane grid = new GridPane();
-        int[][] maze = new int[nRow][nCol];           //cree le labyrinthe c'est une matrice
-        Pane[][] squares = new Pane[nRow][nCol];      //pour chaque case de l'affichage du labyrinthe
+            // Barre supérieure : Saisie des dimensions
+            HBox sizeInput = new HBox(10);
+            TextField widthField = new TextField();
+            widthField.setPromptText("Largeur");
+            TextField heightField = new TextField();
+            heightField.setPromptText("Hauteur");
 
-        
-        // Ajout des contraintes UNE FOIS
-        for (int i = 0; i < nCol; i++) {
-            grid.getColumnConstraints().add(new ColumnConstraints(cellSize));
-        }
-        for (int j = 0; j < nRow; j++) {
-            grid.getRowConstraints().add(new RowConstraints(cellSize));
-        }
-        
-        
-        // Remplir la grille
-        for (int j = 0; j < nRow; j++) {
-            for (int i = 0; i < nCol; i++) {
-            	if (i<nRow && j<nCol) {
-                    maze[j][i] = i + j;
-            	}
-                Pane square = new Pane();
-                square.setPrefSize(cellSize, cellSize);
+            Button perfectButton = new Button("Labyrinthe parfait");
+            Button imperfectButton = new Button("Labyrinthe non parfait");
 
-                // Definir la couleur selon la parité
-                if (i % 2 == 1 && j % 2 == 1) {
-                    square.setStyle("-fx-background-color: white;");
-                } else {
-                    square.setStyle("-fx-background-color: green;");
+            sizeInput.getChildren().addAll(new Label("Largeur : "), widthField, new Label("Hauteur : "), heightField, perfectButton, imperfectButton);
+            root.setTop(sizeInput);
+
+            // Conteneur du labyrinthe (initialement vide)
+            MazeGenerator mazeGen = new MazeGenerator(10, 10, true); // Dimensions par défaut
+            root.setCenter(mazeGen.getGridPane());
+
+            // Action du bouton "Labyrinthe parfait"
+            perfectButton.setOnAction(e -> {
+                try {
+                    int width = Integer.parseInt(widthField.getText());
+                    int height = Integer.parseInt(heightField.getText());
+                    MazeGenerator newMaze = new MazeGenerator(width, height, true);
+                    root.setCenter(newMaze.getGridPane());
+                } catch (NumberFormatException ex) {
+                    System.err.println("Veuillez entrer des dimensions valides.");
                 }
-                
+            });
 
-                squares[j][i] = square;
-                grid.add(square, i, j); // (colonne, ligne)
-            }
+            // Action du bouton "Labyrinthe non parfait"
+            imperfectButton.setOnAction(e -> {
+                try {
+                    int width = Integer.parseInt(widthField.getText());
+                    int height = Integer.parseInt(heightField.getText());
+                    MazeGenerator newMaze = new MazeGenerator(width, height, false);
+                    root.setCenter(newMaze.getGridPane());
+                } catch (NumberFormatException ex) {
+                    System.err.println("Veuillez entrer des dimensions valides.");
+                }
+            });
+
+            Scene scene = new Scene(root, 800, 600);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Génération de labyrinthe");
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println(maze[0][0]);
-        
-        Random rand = new Random();
-        grid.setGridLinesVisible(true);
- Scene scene = new Scene(grid,200, nRow * cellSize + 2);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Grille Labyrinthe");
-        primaryStage.show();
     }
 
     public static void main(String[] args) {
