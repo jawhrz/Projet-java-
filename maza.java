@@ -29,10 +29,11 @@ public class Maze extends Application {
 			
 			for (int row = 0; row < 37; row++) {
 			    for (int col = 0; col < 65; col++) {
-			        Pane placeholder = new Pane();
-			        placeholder.setStyle("-fx-background-color: black;");
-			        value[row][col]=-1;
-			        grid.add(placeholder, col, row);
+			    	Button btn = new Button();
+		            btn.setPrefSize(23, 21);
+		            btn.setStyle("-fx-background-color: black;");
+		            value[row][col] = -1;
+		            grid.add(btn, col, row);
 			    }
 			}
 			
@@ -41,17 +42,18 @@ public class Maze extends Application {
 			
 			for (int row = 1; row < 37; row+=2) {
 			    for (int col = 1; col < 65; col+=2) {
-			        Pane placeholder = new Pane();
-			        placeholder.setStyle("-fx-background-color: blue;");
-			        value[row][col]=compteur;
-			        grid.add(placeholder, col, row);
-			        compteur+=1;
+			    	Button btn = new Button();
+		            btn.setPrefSize(23, 21);
+		            btn.setStyle("-fx-background-color: blue;");
+		            value[row][col] = compteur;
+		            grid.add(btn, col, row);
+		            compteur++;
 			    }
 			}
 			
 			generationMazeCompletePasParfait(value, grid);
 
-			grid.setGridLinesVisible(true); // pour voir les lignes de la grille
+			//grid.setGridLinesVisible(true); // pour voir les lignes de la grille
 			
 			
 
@@ -85,7 +87,6 @@ public class Maze extends Application {
 	
 	// choisir la couleur
 	public void changerCouleurDeCase(GridPane grille, int ligneVoulue, int colonneVoulue, String couleur) {
-	    
 	    // Parcourir toutes les cases (nœuds) de la grille
 	    for (Node caseDansLaGrille : grille.getChildren()) {
 
@@ -93,22 +94,23 @@ public class Maze extends Application {
 	        Integer ligneCase = GridPane.getRowIndex(caseDansLaGrille);
 	        Integer colonneCase = GridPane.getColumnIndex(caseDansLaGrille);
 
-	        // cas :aucune ligne/colonne n'est définie
+	        // Cas : aucune ligne/colonne n'est définie
 	        if (ligneCase == null) ligneCase = 0;
 	        if (colonneCase == null) colonneCase = 0;
 
-
+	        // Si on a trouvé la case à modifier
 	        if (ligneCase == ligneVoulue && colonneCase == colonneVoulue) {
-
-	            // Changer la couleur
-	            Pane maCase = (Pane) caseDansLaGrille;
-	            maCase.setStyle("-fx-background-color: " + couleur + ";");
-
-
-	            break;
+	            // Vérifier si c'est bien un bouton
+	            if (caseDansLaGrille instanceof Button) {
+	                Button bouton = (Button) caseDansLaGrille;
+	                // Appliquer la couleur au bouton existant
+	                bouton.setStyle("-fx-background-color: " + couleur + ";");
+	            }
+	            break;  // Quitter dès qu'on a trouvé la case
 	        }
 	    }
 	}
+
 
 	public void generationMazeCompleteParfait(int[][] values, GridPane grid) {
 	    Random rand = new Random();
@@ -232,9 +234,9 @@ public class Maze extends Application {
 
 	        int mursACasser;
 	        if (c >= 30) {
-	            mursACasser = 30;  // On limite à 30 
+	            mursACasser = 30;  // On limite à 10 si on en a assez
 	        } else {
-	            mursACasser = c;   // Sinon c'est bueno
+	            mursACasser = c;   // Sinon, on prend ce qu'on a
 	        }
 
 	        for (int k = 0; k < mursACasser; k++) {
