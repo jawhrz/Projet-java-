@@ -232,9 +232,9 @@ public class Maze extends Application {
 
 	        int mursACasser;
 	        if (c >= 30) {
-	            mursACasser = 30;  // On limite à 10 si on en a assez
+	            mursACasser = 30;  // On limite à 30 
 	        } else {
-	            mursACasser = c;   // Sinon, on prend ce qu'on a
+	            mursACasser = c;   // Sinon c'est bueno
 	        }
 
 	        for (int k = 0; k < mursACasser; k++) {
