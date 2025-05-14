@@ -1,8 +1,10 @@
 package application;
 
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,7 @@ public class MazeGenerator {
     private final List<int[]> walls;
     private final boolean isPerfect;
 
-    public MazeGenerator(int rows, int cols, boolean isPerfect) {
+    public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive) {
         this.rows = rows;
         this.cols = cols;
         this.width = 2 * cols + 1;
@@ -28,10 +30,17 @@ public class MazeGenerator {
         this.walls = new ArrayList<>();
         this.isPerfect = isPerfect;
 
-        initMazeGrid();
-        collectWalls();
-        Collections.shuffle(walls);
-        generateMaze();
+        initMazeGrid(); // remplacer dans mazegrid les murs par -1 et le reste par un autre nombre (de 1 a nombre de case blanche)
+        collectWalls(); //parcours tout les wall qui ne sont pas des coins 
+        Collections.shuffle(walls); //melange tout les murs pour que ce soit au hasard 
+
+        if (isProgressive) {
+        	displayGrid();
+            generateMazeProgressively();
+        } else {
+            generateMazeInstantly(); //modifie seulement la mazegrid
+            displayGrid();
+        }
     }
 
     private void initMazeGrid() {
@@ -50,42 +59,94 @@ public class MazeGenerator {
     private void collectWalls() {
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
-                if (i % 2 == 1 && j % 2 == 0) {
-                    walls.add(new int[]{i, j}); // Mur vertical
-                } else if (i % 2 == 0 && j % 2 == 1) {
-                    walls.add(new int[]{i, j}); // Mur horizontal
+                if ((i % 2 == 1 && j % 2 == 0) || (i % 2 == 0 && j % 2 == 1)) {
+                    walls.add(new int[]{i, j});
                 }
             }
         }
     }
 
-    private void generateMaze() {
+    private void generateMazeInstantly() {
         for (int[] wall : walls) {
-            int i = wall[0];
-            int j = wall[1];
-
-            if (i % 2 == 1 && j % 2 == 0) { // Mur vertical
-                int left = mazeGrid[i][j - 1];
-                int right = mazeGrid[i][j + 1];
-
-                if (left != right) {
-                    mazeGrid[i][j] = left;
-                    replaceCellValue(right, left);
-                }
-            } else if (i % 2 == 0 && j % 2 == 1) { // Mur horizontal
-                int top = mazeGrid[i - 1][j];
-                int bottom = mazeGrid[i + 1][j];
-
-                if (top != bottom) {
-                    mazeGrid[i][j] = top;
-                    replaceCellValue(bottom, top);
-                }
-            }
+            tryBreakWall(wall); 
+                // mur cassé
+            
         }
 
         if (!isPerfect) {
             breakExtraWalls(5);
         }
+    }
+
+    private void generateMazeProgressively() {
+        Timeline timeline = new Timeline();
+        int delay = 50; // en ms
+
+        List<int[]> wallsCopy = new ArrayList<>(walls);
+        Collections.shuffle(wallsCopy);
+
+        final int[] index = {0};
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(delay), event -> {
+            if (index[0] < wallsCopy.size()) {
+                int[] wall = wallsCopy.get(index[0]);
+                int i = wall[0];
+                int j = wall[1];
+
+                if (tryBreakWall(wall)) {
+                    // Met à jour le mur
+                    updateSingleButton(i, j);
+
+                    // Et les deux cellules reliées par le mur
+                    if (i % 2 == 1) { // mur vertical
+                        updateSingleButton(i, j - 1);
+                        updateSingleButton(i, j + 1);
+                    } else { // mur horizontal
+                        updateSingleButton(i - 1, j);
+                        updateSingleButton(i + 1, j);
+                    }
+                }
+
+                index[0]++;
+            } else {
+                if (!isPerfect) {
+                    breakExtraWalls(5);
+                    displayGrid(); // met à jour l'affichage complet
+                }
+                timeline.stop();
+            }
+        });
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(wallsCopy.size());
+        timeline.play();
+    }
+
+
+    private boolean tryBreakWall(int[] wall) {
+        int i = wall[0];
+        int j = wall[1];
+
+        if (i % 2 == 1 && j % 2 == 0) { //mur verticale
+            int left = mazeGrid[i][j - 1];
+            int right = mazeGrid[i][j + 1];
+
+            if (left != right) {
+                mazeGrid[i][j] = left;
+                replaceCellValue(right, left);
+                return true;
+            }
+        } else if (i % 2 == 0 && j % 2 == 1) { // mur horizontal
+            int top = mazeGrid[i - 1][j];
+            int bottom = mazeGrid[i + 1][j];
+
+            if (top != bottom) {
+                mazeGrid[i][j] = top;
+                replaceCellValue(bottom, top);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void replaceCellValue(int oldId, int newId) {
@@ -116,56 +177,64 @@ public class MazeGenerator {
         }
     }
 
-    /**
-     * Génère un GridPane avec des boutons interactifs.
-     */
-    public GridPane getGridPane() {
+    
+    private void displayGrid() {
         root.getChildren().clear();
-
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Button btn = new Button();
+                Button btn = new Button();         
                 btn.setMinSize(20, 20);
                 btn.setMaxSize(20, 20);
+                colorButton(btn, mazeGrid[i][j]);
 
                 int x = i;
                 int y = j;
-
-                // Applique le style initial
-                updateButtonStyle(btn, mazeGrid[i][j]);
-
-                // Action lors du clic
                 btn.setOnAction(e -> {
-                    toggleWall(x, y);
-                    updateButtonStyle(btn, mazeGrid[x][y]);
+                    changement(x, y);
+                    colorButton(btn, mazeGrid[x][y]);
                 });
 
                 root.add(btn, j, i);
             }
         }
-
-        return root;
     }
 
-    /**
-     * Bascule entre mur et case vide.
-     */
-    private void toggleWall(int i, int j) {
-        if (mazeGrid[i][j] == -1) {
-            mazeGrid[i][j] = 0; // Mur devient une case vide
-        } else if (mazeGrid[i][j] == 0) {
-            mazeGrid[i][j] = -1; // Case vide devient un mur
-        }
+    private void updateSingleButton(int i, int j) {
+        Button btn = new Button();
+        btn.setMinSize(20, 20);
+        btn.setMaxSize(20, 20);
+        colorButton(btn, mazeGrid[i][j]);
+
+        int x = i;
+        int y = j;
+        btn.setOnAction(e -> {
+            changement(x, y);
+            colorButton(btn, mazeGrid[x][y]);
+        });
+
+        root.add(btn, j, i);
     }
 
-    /**
-     * Met à jour le style d'un bouton en fonction de sa valeur.
-     */
-    private void updateButtonStyle(Button btn, int value) {
+    private void changement(int i, int j) {
+    	if (i!=0 && j!=0 && i!=height-1 && j!=width-1) {
+	    	if (mazeGrid[i][j] == -1) {
+	            mazeGrid[i][j] = mazeGrid[1][1];
+	        } else if (mazeGrid[i][j] ==  mazeGrid[1][1]) {
+	            mazeGrid[i][j] = -1;
+	        }
+    }}
+
+    private void colorButton(Button btn, int value) { // donne la couleur en fonction
         if (value == -1) {
             btn.setStyle("-fx-background-color: black;");
         } else {
             btn.setStyle("-fx-background-color: white;");
         }
+    }
+
+    
+    
+    public GridPane getGridPane() {
+        return root;
     }
 }
