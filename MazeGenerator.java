@@ -1,5 +1,7 @@
 package application;
 
+import java.util.*;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
@@ -18,6 +20,7 @@ public class MazeGenerator {
     private final int[][] mazeGrid;
     private final GridPane root;
     private final List<int[]> walls;
+    private final List<int[]> values;
     private final boolean isPerfect;
 
     public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive) {
@@ -28,11 +31,14 @@ public class MazeGenerator {
         this.mazeGrid = new int[height][width];
         this.root = new GridPane();
         this.walls = new ArrayList<>();
+        this.values = new ArrayList<>();
         this.isPerfect = isPerfect;
 
         initMazeGrid(); // remplacer dans mazegrid les murs par -1 et le reste par un autre nombre (de 1 a nombre de case blanche)
         collectWalls(); //parcours tout les wall qui ne sont pas des coins 
         Collections.shuffle(walls); //melange tout les murs pour que ce soit au hasard 
+        collectVallues();
+        Collections.shuffle(values);
 
         if (isProgressive) {
         	displayGrid();
@@ -66,6 +72,18 @@ public class MazeGenerator {
         }
     }
 
+    
+    private void collectVallues() {
+        for (int i = 1; i < height - 1; i++) {
+            for (int j = 1; j < width - 1; j++) {
+                if (mazeGrid[i][j]!=-1) {
+                    values.add(new int[]{i, j});
+                }
+            }
+        }
+    }
+    
+    
     private void generateMazeInstantly() {
         for (int[] wall : walls) {
             tryBreakWall(wall); 
@@ -74,7 +92,14 @@ public class MazeGenerator {
         }
 
         if (!isPerfect) {
+        	Random r = new Random();
+        	int a = r.nextInt(2);
+        	if(a==0) {
             breakExtraWalls(5);
+            }
+        	else {
+        		addExtraWalls(5);
+        	}
         }
     }
 
@@ -173,7 +198,25 @@ public class MazeGenerator {
         Collections.shuffle(remainingWalls);
         for (int k = 0; k < Math.min(count, remainingWalls.size()); k++) {
             int[] wall = remainingWalls.get(k);
-            mazeGrid[wall[0]][wall[1]] = 0;
+            mazeGrid[wall[0]][wall[1]] = mazeGrid[1][1];
+        }
+    }
+    
+    private void addExtraWalls(int count) {
+        List<int[]> remainingCells = new ArrayList<>();
+
+        for (int[] value : values) {
+            int i = value[0];
+            int j = value[1];
+            if (mazeGrid[i][j] != -1) {
+                remainingCells.add(value);
+            }
+        }
+
+        Collections.shuffle(remainingCells);
+        for (int k = 0; k < Math.min(count, remainingCells.size()); k++) {
+            int[] value = remainingCells.get(k);
+            mazeGrid[value[0]][value[1]] = -1;
         }
     }
 
