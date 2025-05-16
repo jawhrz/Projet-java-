@@ -1,5 +1,10 @@
 package application;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import java.util.*;
 
 import javafx.animation.KeyFrame;
@@ -8,6 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +28,12 @@ public class MazeGenerator {
     private final int[][] mazeGrid;
     private final GridPane root;
     private final List<int[]> walls;
-    private final List<int[]> values;
     private final boolean isPerfect;
-
-    public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive) {
+    private final Button[][] buttonGrid;
+    private final int Speed;
+    private final List<int[]> values;
+    
+    public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive, int Speed) {
         this.rows = rows;
         this.cols = cols;
         this.width = 2 * cols + 1;
@@ -31,22 +41,31 @@ public class MazeGenerator {
         this.mazeGrid = new int[height][width];
         this.root = new GridPane();
         this.walls = new ArrayList<>();
-        this.values = new ArrayList<>();
         this.isPerfect = isPerfect;
+        
+        this.values = new ArrayList<>();
+        this.buttonGrid = new Button[height][width];
+        this.Speed=Speed;
 
         initMazeGrid(); // remplacer dans mazegrid les murs par -1 et le reste par un autre nombre (de 1 a nombre de case blanche)
         collectWalls(); //parcours tout les wall qui ne sont pas des coins 
         Collections.shuffle(walls); //melange tout les murs pour que ce soit au hasard 
         collectVallues();
         Collections.shuffle(values);
-
         if (isProgressive) {
         	displayGrid();
-            generateMazeProgressively();
+            generateMazeProgressively(Speed);
         } else {
             generateMazeInstantly(); //modifie seulement la mazegrid
             displayGrid();
         }
+        
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    System.out.println(mazeGrid[i][j]);
+                }
+            }
+
     }
 
     private void initMazeGrid() {
@@ -72,7 +91,6 @@ public class MazeGenerator {
         }
     }
 
-    
     private void collectVallues() {
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
@@ -83,12 +101,9 @@ public class MazeGenerator {
         }
     }
     
-    
     private void generateMazeInstantly() {
         for (int[] wall : walls) {
-            tryBreakWall(wall); 
-                // mur cassé
-            
+            tryBreakWall(wall);  // mur cassé
         }
 
         if (!isPerfect) {
@@ -103,13 +118,10 @@ public class MazeGenerator {
         }
     }
 
-    private void generateMazeProgressively() {
+    private void generateMazeProgressively(int delay) {// en ms
         Timeline timeline = new Timeline();
-        int delay = 50; // en ms
 
         List<int[]> wallsCopy = new ArrayList<>(walls);
-        Collections.shuffle(wallsCopy);
-
         final int[] index = {0};
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(delay), event -> {
@@ -134,16 +146,24 @@ public class MazeGenerator {
 
                 index[0]++;
             } else {
-                if (!isPerfect) {
+            	if (!isPerfect) {
+                	Random r = new Random();
+                	int a = r.nextInt(2);
+                	if(a==0) {
                     breakExtraWalls(5);
-                    displayGrid(); // met à jour l'affichage complet
+                    displayGrid();
+                    }
+                	else {
+                		addExtraWalls(5);
+                		displayGrid();
+                	}
                 }
                 timeline.stop();
             }
         });
 
         timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(wallsCopy.size());
+        timeline.setCycleCount(wallsCopy.size()+wallsCopy.size()/5);
         timeline.play();
     }
 
@@ -175,8 +195,8 @@ public class MazeGenerator {
     }
 
     private void replaceCellValue(int oldId, int newId) {
-        for (int i = 1; i < height; i += 2) {
-            for (int j = 1; j < width; j += 2) {
+        for (int i = 1; i < height-1; i ++) {
+            for (int j = 1; j < width-1; j ++) {
                 if (mazeGrid[i][j] == oldId) {
                     mazeGrid[i][j] = newId;
                 }
@@ -201,7 +221,7 @@ public class MazeGenerator {
             mazeGrid[wall[0]][wall[1]] = mazeGrid[1][1];
         }
     }
-    
+
     private void addExtraWalls(int count) {
         List<int[]> remainingCells = new ArrayList<>();
 
@@ -219,7 +239,7 @@ public class MazeGenerator {
             mazeGrid[value[0]][value[1]] = -1;
         }
     }
-
+    
     
     private void displayGrid() {
         root.getChildren().clear();
@@ -243,7 +263,7 @@ public class MazeGenerator {
     }
 
     private void updateSingleButton(int i, int j) {
-        Button btn = new Button();
+        Button btn = new Button(String.valueOf(mazeGrid[i][j]));
         btn.setMinSize(20, 20);
         btn.setMaxSize(20, 20);
         colorButton(btn, mazeGrid[i][j]);
@@ -251,7 +271,7 @@ public class MazeGenerator {
         int x = i;
         int y = j;
         btn.setOnAction(e -> {
-            changement(x, y);
+            changement(x, y);   //change la valeur de la case en (i,j): devient un mur si c'était une case et inversement
             colorButton(btn, mazeGrid[x][y]);
         });
 
@@ -262,7 +282,7 @@ public class MazeGenerator {
     	if (i!=0 && j!=0 && i!=height-1 && j!=width-1) {
 	    	if (mazeGrid[i][j] == -1) {
 	            mazeGrid[i][j] = mazeGrid[1][1];
-	        } else if (mazeGrid[i][j] ==  mazeGrid[1][1]) {
+	        } else {
 	            mazeGrid[i][j] = -1;
 	        }
     }}
@@ -275,9 +295,12 @@ public class MazeGenerator {
         }
     }
 
-    
-    
+  
     public GridPane getGridPane() {
         return root;
+    }
+    
+    public int[][] getMazeGrid(){
+    	return this.mazeGrid;
     }
 }
