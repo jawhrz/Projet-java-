@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import java.util.*;
 
 public class Main extends Application {
 
@@ -16,8 +17,8 @@ public class Main extends Application {
         BorderPane root = new BorderPane();
 
         TextField widthField = new TextField();
-        
         TextField heightField = new TextField();
+        TextField speed = new TextField();
         
 
         Button perfectFast = new Button("Parfait - Complet");
@@ -29,15 +30,16 @@ public class Main extends Application {
         controls.getChildren().addAll(
                 new Label("Largeur :"), widthField,
                 new Label("Hauteur :"), heightField,
+                new Label("Vitesse :"), speed,
                 perfectFast, perfectSlow, imperfectFast, imperfectSlow
         );
         root.setTop(controls);
 
 
-        perfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, true, false));
-        perfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, true, true));
-        imperfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, false, false));
-        imperfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, false, true));
+        perfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, true, false,speed));
+        perfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, true, true,speed));
+        imperfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, false, false,speed));
+        imperfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, false, true,speed));
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Génération de labyrinthe");
@@ -45,17 +47,23 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private void generateMaze(BorderPane root, TextField widthField, TextField heightField, boolean perfect, boolean progressive) {
+    private void generateMaze(BorderPane root, TextField widthField, TextField heightField, boolean perfect, boolean progressive, TextField speed) {
         try {
+        	String speedText = speed.getText();
+            int Speed = 0;
+            if (!speedText.isEmpty()) {
+                Speed = Integer.parseInt(speedText);}
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive);
+            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed);
             root.setCenter(newMaze.getGridPane());
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
         }
     }
 
+  
+    
     public static void main(String[] args) {
         launch(args);
     }
