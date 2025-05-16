@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 import java.util.*;
 
 public class Main extends Application {
+			
+	Button showPathButton = new Button("BFS");
+	private MazeGenerator currentMaze;
+	private resolution res = new resolution();
 
     @Override
     public void start(Stage primaryStage) {
@@ -25,7 +29,17 @@ public class Main extends Application {
         Button perfectSlow = new Button("Parfait - Pas à pas");
         Button imperfectFast = new Button("Imparfait - Complet");
         Button imperfectSlow = new Button("Imparfait - Pas à pas");
+        
+        showPathButton.setVisible(false); // bouton caché
+        showPathButton.setOnAction(e -> {
+            if (currentMaze != null) {
+                res.resDistance(currentMaze);
+                res.highlightShortestPath(currentMaze);
+            }
+        });
+        root.setBottom(showPathButton);
 
+        
         HBox controls = new HBox(10);
         controls.getChildren().addAll(
                 new Label("Largeur :"), widthField,
@@ -35,12 +49,13 @@ public class Main extends Application {
         );
         root.setTop(controls);
 
-
+        
         perfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, true, false,speed));
         perfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, true, true,speed));
         imperfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, false, false,speed));
         imperfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, false, true,speed));
-
+        
+        
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Génération de labyrinthe");
         primaryStage.setScene(scene);
@@ -56,7 +71,9 @@ public class Main extends Application {
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
             MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed);
-            root.setCenter(newMaze.getGridPane());
+            currentMaze = newMaze;
+            root.setCenter(currentMaze.getGridPane());
+            showPathButton.setVisible(true); // le bouton devient visible après génération
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
         }
