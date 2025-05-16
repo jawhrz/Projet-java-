@@ -241,11 +241,12 @@ public class MazeGenerator {
     }
     
     
-    private void displayGrid() {
+    public void displayGrid() {
         root.getChildren().clear();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Button btn = new Button();         
+                Button btn = new Button(); 
+                buttonGrid[i][j]=btn;
                 btn.setMinSize(20, 20);
                 btn.setMaxSize(20, 20);
                 colorButton(btn, mazeGrid[i][j]);
@@ -263,7 +264,8 @@ public class MazeGenerator {
     }
 
     private void updateSingleButton(int i, int j) {
-        Button btn = new Button(String.valueOf(mazeGrid[i][j]));
+        Button btn = new Button();
+        buttonGrid[i][j]=btn;
         btn.setMinSize(20, 20);
         btn.setMaxSize(20, 20);
         colorButton(btn, mazeGrid[i][j]);
@@ -302,5 +304,16 @@ public class MazeGenerator {
     
     public int[][] getMazeGrid(){
     	return this.mazeGrid;
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return width;
+    }
+    public Button[][] getButtonGrid(){
+    	return this.buttonGrid;
     }
 }
