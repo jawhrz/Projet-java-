@@ -54,3 +54,16 @@ public static void resDistanceSlow(MazeGenerator maze) {
 	    timeline.setCycleCount(Animation.INDEFINITE); // boucle infinie jusqu’à `stop()`
 	    timeline.play();
 	}
+
+List<int[]> dejavu=new ArrayList<>();
+    List<int[]> atraiter=new ArrayList<>();
+    
+    private void DFS(MazeGenerator maze,List<int[]>atraiter,List<int[]> dejavu, int[] depart) {
+    	int[][] grid= maze.getMazeGrid();
+    	
+    	dejavu.add(depart);
+    	atraiter.add(depart);
+    	while (!atraiter.isEmpty()) {
+    		//for (int[] :)
+    	}
+    }
