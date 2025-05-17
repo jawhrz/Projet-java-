@@ -115,6 +115,71 @@ public class Resolution {
 	    }
 	}
 
+	
+	public static void resDistanceSlow(MazeGenerator maze) {
+	    int height = maze.getHeight();
+	    int width = maze.getWidth();
+	    int[][] grid = maze.getMazeGrid();
+	    initDistance(maze);
+
+	    int distance = 1;
+	    List<int[]> dejavu = new ArrayList<>();
+	    List<int[]> atraiter = new ArrayList<>();
+	    List<Button> pathButtons = new ArrayList<>();
+	    Button[][] buttonGrid=maze.getButtonGrid();
+
+	    int[] position = {height - 2, width - 1}; // cellule de sortie
+	    grid[position[0]][position[1]] = distance;
+	    atraiter.add(position);
+	    dejavu.add(position);
+
+	    while (grid[1][1] == 0 && !atraiter.isEmpty()) {
+	        int size = atraiter.size();
+	        distance++; // on augmente la distance à chaque "couche"
+	        
+	        for (int k = 0; k < size; k++) {
+	            int[] courant = atraiter.remove(0);
+
+	            for (int[] neighbor : searchNeighbor(courant, maze)) {
+	                int a = neighbor[0];
+	                int b = neighbor[1];
+
+	                // Vérification manuelle pour éviter le problème des références d'objets
+	                boolean dejaVu = false;
+	                for (int[] vu : dejavu) {
+	                    if (vu[0] == a && vu[1] == b) {
+	                        dejaVu = true;
+	                        break;
+	                    }
+	                }
+
+	                if (!dejaVu) {
+	                    grid[a][b] = distance;
+	                    atraiter.add(new int[]{a, b});
+	                    dejavu.add(new int[]{a, b});
+	                    pathButtons.add(buttonGrid[a][b]);
+	                }
+	            }
+	        }
+	    }
+	    
+	    Timeline timeline = new Timeline();
+	    for (int k = 0; k < pathButtons.size(); k++) {
+	        Button btn = pathButtons.get(k);
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis(200 * k), e -> {
+	            btn.setStyle("-fx-background-color: red;");
+	        });
+	        timeline.getKeyFrames().add(keyFrame);
+	    }
+
+	    // la premeire case est affiché directment
+	    buttonGrid[1][1].setStyle("-fx-background-color: red;");
+
+	    timeline.play();
+	    
+	}
+	
+	
 	public static void highlightShortestPath(MazeGenerator maze) {
 	    int[][] grid = maze.getMazeGrid();
         Button[][] buttonGrid=maze.getButtonGrid();
@@ -141,7 +206,7 @@ public class Resolution {
 	        }
 	    }
 	}
-
+	
 	
 	
 	public static void highlightShortestPathAnimation(MazeGenerator maze) {
@@ -170,6 +235,8 @@ public class Resolution {
 	            }
 	        }
 	    }
+	    
+	    
 	    //pas à pas
 	    Timeline timeline = new Timeline();
 	    for (int k = 0; k < pathButtons.size(); k++) {
@@ -185,6 +252,9 @@ public class Resolution {
 
 	    timeline.play();
 	}
+	
+	
+	
 	
 	
 	public void resDfs(){
