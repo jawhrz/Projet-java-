@@ -1,105 +1,131 @@
-import javax.swing.*;
-import java.awt.*;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
-public class LabyrintheInterface extends JFrame {
+public class LabyrintheInterfaceFX extends Application {
 
-    public LabyrintheInterface() {
-        setTitle("Labyrinthe");
-        setSize(400, 450);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
+    @Override
+    public void start(Stage fenetrePrincipale) {
+        
+        fenetrePrincipale.setTitle("Labyrinthe");
+        fenetrePrincipale.setWidth(400);
+        fenetrePrincipale.setHeight(450);
+        fenetrePrincipale.setResizable(false);
 
-        Color noir = Color.BLACK;
-        Color rouge = new Color(200, 0, 0);
-        Color jaune = new Color(255, 204, 0);
-        Color bleu = new Color(0, 102, 204);
+        
+        Color couleurNoir = Color.BLACK;
+        Color couleurRouge = Color.rgb(200, 0, 0);
+        Color couleurJaune = Color.rgb(255, 204, 0);
+        Color couleurBleu = Color.rgb(0, 102, 204);
 
-        JPanel panneau = new JPanel();
-        panneau.setBackground(noir);
-        panneau.setLayout(null);
+        
+        Pane panneauPrincipal = new Pane();
+        panneauPrincipal.setStyle("-fx-background-color: black;");
 
-        JLabel titre = new JLabel("LABYRINTHE");
-        titre.setFont(new Font("Arial", Font.BOLD, 32));
-        titre.setForeground(Color.WHITE);
-        titre.setBounds(90, 20, 250, 40);
-        panneau.add(titre);
+        
+        Label labelTitre = new Label("LABYRINTHE");
+        labelTitre.setFont(Font.font("Arial", 32));
+        labelTitre.setTextFill(Color.WHITE);
+        labelTitre.setLayoutX(90);
+        labelTitre.setLayoutY(20);
 
-        JButton boutonGenerer = new JButton("GÉNÉRER");
-        boutonGenerer.setBounds(120, 70, 150, 40);
-        boutonGenerer.setBackground(rouge);
-        boutonGenerer.setForeground(Color.WHITE);
-        boutonGenerer.setFocusPainted(false);
-        panneau.add(boutonGenerer);
+        
+        Button boutonGenerer = new Button("GÉNÉRER");
+        boutonGenerer.setLayoutX(120);
+        boutonGenerer.setLayoutY(70);
+        boutonGenerer.setPrefSize(150, 40);
+        boutonGenerer.setStyle("-fx-background-color: rgb(200,0,0); -fx-text-fill: white; -fx-focus-color: transparent;");
 
-        JLabel texteLong = new JLabel("Longueur:");
-        texteLong.setBounds(50, 130, 100, 25);
-        texteLong.setForeground(jaune);
-        panneau.add(texteLong);
+        
+        Label labelLongueur = new Label("Longueur:");
+        labelLongueur.setTextFill(couleurJaune);
+        labelLongueur.setLayoutX(50);
+        labelLongueur.setLayoutY(130);
 
-        JTextField champLong = new JTextField();
-        champLong.setBounds(150, 130, 180, 25);
-        champLong.setBackground(bleu);
-        champLong.setForeground(Color.WHITE);
-        panneau.add(champLong);
+        TextField champLongueur = new TextField();
+        champLongueur.setLayoutX(150);
+        champLongueur.setLayoutY(130);
+        champLongueur.setPrefWidth(180);
+        champLongueur.setStyle("-fx-background-color: rgb(0,102,204); -fx-text-fill: white;");
 
-        JLabel texteLarg = new JLabel("Largeur:");
-        texteLarg.setBounds(50, 170, 100, 25);
-        texteLarg.setForeground(jaune);
-        panneau.add(texteLarg);
+        
+        Label labelLargeur = new Label("Largeur:");
+        labelLargeur.setTextFill(couleurJaune);
+        labelLargeur.setLayoutX(50);
+        labelLargeur.setLayoutY(170);
 
-        JTextField champLarg = new JTextField();
-        champLarg.setBounds(150, 170, 180, 25);
-        champLarg.setBackground(bleu);
-        champLarg.setForeground(Color.WHITE);
-        panneau.add(champLarg);
+        TextField champLargeur = new TextField();
+        champLargeur.setLayoutX(150);
+        champLargeur.setLayoutY(170);
+        champLargeur.setPrefWidth(180);
+        champLargeur.setStyle("-fx-background-color: rgb(0,102,204); -fx-text-fill: white;");
 
-        JLabel texteDiff = new JLabel("Difficulté :");
-        texteDiff.setBounds(50, 210, 100, 25);
-        texteDiff.setForeground(jaune);
-        panneau.add(texteDiff);
+        
+        Label labelDifficulte = new Label("Difficulté :");
+        labelDifficulte.setTextFill(couleurJaune);
+        labelDifficulte.setLayoutX(50);
+        labelDifficulte.setLayoutY(210);
 
-        JRadioButton choix1 = new JRadioButton("Résolution 1");
-        choix1.setBounds(50, 240, 120, 25);
-        choix1.setForeground(Color.WHITE);
-        choix1.setBackground(noir);
+        
+        RadioButton radioDifficulte1 = new RadioButton("Résolution 1");
+        radioDifficulte1.setTextFill(Color.WHITE);
+        radioDifficulte1.setLayoutX(50);
+        radioDifficulte1.setLayoutY(240);
+        radioDifficulte1.setStyle("-fx-background-color: transparent;");
 
-        JRadioButton choix2 = new JRadioButton("Résolution 2");
-        choix2.setBounds(200, 240, 120, 25);
-        choix2.setForeground(Color.WHITE);
-        choix2.setBackground(noir);
+        RadioButton radioDifficulte2 = new RadioButton("Résolution 2");
+        radioDifficulte2.setTextFill(Color.WHITE);
+        radioDifficulte2.setLayoutX(200);
+        radioDifficulte2.setLayoutY(240);
+        radioDifficulte2.setStyle("-fx-background-color: transparent;");
 
-        JRadioButton choix3 = new JRadioButton("Résolution 3");
-        choix3.setBounds(50, 270, 120, 25);
-        choix3.setForeground(Color.WHITE);
-        choix3.setBackground(noir);
+        RadioButton radioDifficulte3 = new RadioButton("Résolution 3");
+        radioDifficulte3.setTextFill(Color.WHITE);
+        radioDifficulte3.setLayoutX(50);
+        radioDifficulte3.setLayoutY(270);
+        radioDifficulte3.setStyle("-fx-background-color: transparent;");
 
-        ButtonGroup groupeBoutons = new ButtonGroup();
-        groupeBoutons.add(choix1);
-        groupeBoutons.add(choix2);
-        groupeBoutons.add(choix3);
+        
+        ToggleGroup groupeDifficulte = new ToggleGroup();
+        radioDifficulte1.setToggleGroup(groupeDifficulte);
+        radioDifficulte2.setToggleGroup(groupeDifficulte);
+        radioDifficulte3.setToggleGroup(groupeDifficulte);
 
-        panneau.add(choix1);
-        panneau.add(choix2);
-        panneau.add(choix3);
+        
+        Button boutonGenererLabyrinthe = new Button("GÉNÉRER LE LABYRINTHE");
+        boutonGenererLabyrinthe.setLayoutX(60);
+        boutonGenererLabyrinthe.setLayoutY(330);
+        boutonGenererLabyrinthe.setPrefSize(270, 40);
+        boutonGenererLabyrinthe.setFont(Font.font("Arial", 14));
+        boutonGenererLabyrinthe.setStyle("-fx-background-color: rgb(200,0,0); -fx-text-fill: white; -fx-font-weight: bold; -fx-focus-color: transparent;");
 
-        JButton boutonFinal = new JButton("GÉNÉRER LE LABYRINTHE");
-        boutonFinal.setBounds(60, 330, 270, 40);
-        boutonFinal.setBackground(rouge);
-        boutonFinal.setForeground(Color.WHITE);
-        boutonFinal.setFont(new Font("Arial", Font.BOLD, 14));
-        boutonFinal.setFocusPainted(false);
-        panneau.add(boutonFinal);
+        
+        panneauPrincipal.getChildren().addAll(
+            labelTitre,
+            boutonGenerer,
+            labelLongueur,
+            champLongueur,
+            labelLargeur,
+            champLargeur,
+            labelDifficulte,
+            radioDifficulte1,
+            radioDifficulte2,
+            radioDifficulte3,
+            boutonGenererLabyrinthe
+        );
 
-        add(panneau);
-        setVisible(true);
+        // Création de la scène et affichage
+        Scene scene = new Scene(panneauPrincipal);
+        fenetrePrincipale.setScene(scene);
+        fenetrePrincipale.show();
     }
 
     public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {}
-
-        new LabyrintheInterface();
+        launch(args);
     }
 }
+
