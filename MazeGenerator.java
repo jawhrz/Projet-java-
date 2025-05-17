@@ -306,12 +306,11 @@ public class MazeGenerator {
     	return this.mazeGrid;
     }
     
-    public int getWidth() {
-        return width;
-    }
-
     public int getHeight() {
-        return width;
+    	return this.height;
+    }
+    public int getWidth() {
+    	return this.width;
     }
     public Button[][] getButtonGrid(){
     	return this.buttonGrid;
