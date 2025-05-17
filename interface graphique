@@ -1,0 +1,105 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class LabyrintheInterface extends JFrame {
+
+    public LabyrintheInterface() {
+        setTitle("Labyrinthe");
+        setSize(400, 450);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        Color noir = Color.BLACK;
+        Color rouge = new Color(200, 0, 0);
+        Color jaune = new Color(255, 204, 0);
+        Color bleu = new Color(0, 102, 204);
+
+        JPanel panneau = new JPanel();
+        panneau.setBackground(noir);
+        panneau.setLayout(null);
+
+        JLabel titre = new JLabel("LABYRINTHE");
+        titre.setFont(new Font("Arial", Font.BOLD, 32));
+        titre.setForeground(Color.WHITE);
+        titre.setBounds(90, 20, 250, 40);
+        panneau.add(titre);
+
+        JButton boutonGenerer = new JButton("GÉNÉRER");
+        boutonGenerer.setBounds(120, 70, 150, 40);
+        boutonGenerer.setBackground(rouge);
+        boutonGenerer.setForeground(Color.WHITE);
+        boutonGenerer.setFocusPainted(false);
+        panneau.add(boutonGenerer);
+
+        JLabel texteLong = new JLabel("Longueur:");
+        texteLong.setBounds(50, 130, 100, 25);
+        texteLong.setForeground(jaune);
+        panneau.add(texteLong);
+
+        JTextField champLong = new JTextField();
+        champLong.setBounds(150, 130, 180, 25);
+        champLong.setBackground(bleu);
+        champLong.setForeground(Color.WHITE);
+        panneau.add(champLong);
+
+        JLabel texteLarg = new JLabel("Largeur:");
+        texteLarg.setBounds(50, 170, 100, 25);
+        texteLarg.setForeground(jaune);
+        panneau.add(texteLarg);
+
+        JTextField champLarg = new JTextField();
+        champLarg.setBounds(150, 170, 180, 25);
+        champLarg.setBackground(bleu);
+        champLarg.setForeground(Color.WHITE);
+        panneau.add(champLarg);
+
+        JLabel texteDiff = new JLabel("Difficulté :");
+        texteDiff.setBounds(50, 210, 100, 25);
+        texteDiff.setForeground(jaune);
+        panneau.add(texteDiff);
+
+        JRadioButton choix1 = new JRadioButton("Résolution 1");
+        choix1.setBounds(50, 240, 120, 25);
+        choix1.setForeground(Color.WHITE);
+        choix1.setBackground(noir);
+
+        JRadioButton choix2 = new JRadioButton("Résolution 2");
+        choix2.setBounds(200, 240, 120, 25);
+        choix2.setForeground(Color.WHITE);
+        choix2.setBackground(noir);
+
+        JRadioButton choix3 = new JRadioButton("Résolution 3");
+        choix3.setBounds(50, 270, 120, 25);
+        choix3.setForeground(Color.WHITE);
+        choix3.setBackground(noir);
+
+        ButtonGroup groupeBoutons = new ButtonGroup();
+        groupeBoutons.add(choix1);
+        groupeBoutons.add(choix2);
+        groupeBoutons.add(choix3);
+
+        panneau.add(choix1);
+        panneau.add(choix2);
+        panneau.add(choix3);
+
+        JButton boutonFinal = new JButton("GÉNÉRER LE LABYRINTHE");
+        boutonFinal.setBounds(60, 330, 270, 40);
+        boutonFinal.setBackground(rouge);
+        boutonFinal.setForeground(Color.WHITE);
+        boutonFinal.setFont(new Font("Arial", Font.BOLD, 14));
+        boutonFinal.setFocusPainted(false);
+        panneau.add(boutonFinal);
+
+        add(panneau);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {}
+
+        new LabyrintheInterface();
+    }
+}
