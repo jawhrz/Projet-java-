@@ -31,6 +31,8 @@ public class Main extends Application {
         Button perfectSlow = new Button("Parfait - Pas à pas");
         Button imperfectFast = new Button("Imparfait - Complet");
         Button imperfectSlow = new Button("Imparfait - Pas à pas");
+	Button saveMaze = new Button("Sauvegarder");
+        Button loadMaze = new Button("Charger");
         HBox hiddenButton = new HBox(3);
         
         showPathButton.setVisible(false); // bouton caché
@@ -64,7 +66,7 @@ public class Main extends Application {
                 new Label("Largeur :"), widthField,
                 new Label("Hauteur :"), heightField,
                 new Label("Vitesse :"), speed,
-                perfectFast, perfectSlow, imperfectFast, imperfectSlow
+                perfectFast, perfectSlow, imperfectFast, imperfectSlow,saveMaze,loadMaze
         );
         root.setTop(controls);
 
@@ -73,7 +75,8 @@ public class Main extends Application {
         perfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, true, true,speed));
         imperfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, false, false,speed));
         imperfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, false, true,speed));
-        
+        saveMaze.setOnAction(e -> SelectFile(true));
+        loadMaze.setOnAction(e -> SelectFile(false));
         
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("Génération de labyrinthe");
@@ -99,7 +102,25 @@ public class Main extends Application {
             System.err.println("Dimensions non valides.");
         }
     }
-
+ private void SelectFile(boolean isSave) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(isSave ? "Sauvegarder le labyrinthe" : "Charger un labyrinthe");
+        fileChooser.getExtensionFilters().add(
+            new ExtensionFilter("Fichiers texte", "*.txt")
+        );
+        File saveDir = new File("src/saves");
+        if (saveDir.exists()) {
+            fileChooser.setInitialDirectory(saveDir.getAbsoluteFile());
+        }
+        File file = isSave ? fileChooser.showSaveDialog(null) : fileChooser.showOpenDialog(null);
+        if (file != null) {
+            if (isSave) {
+                SaveMazeManager.saveMaze(file,currentMaze);
+            } else {
+                SaveMazeManager.loadMaze(file,currentMaze);
+            }
+        }
+    }
   
     
     public static void main(String[] args) {
