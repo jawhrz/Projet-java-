@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-public class resolution {
+
+public class Resolution {
 	  	/*List<int[]> dejavu=new ArrayList<>();
 	    List<int[]> atraiter=new ArrayList<>();
 	    
@@ -141,7 +142,54 @@ public class resolution {
 	    }
 	}
 
+	
+	
+	public static void highlightShortestPathAnimation(MazeGenerator maze) {
+	    int[][] grid = maze.getMazeGrid();
+        Button[][] buttonGrid=maze.getButtonGrid();
+        List<Button> pathButtons = new ArrayList<>();
+        
+	    int i = 1;
+	    int j = 1;
+	    int distance = grid[i][j];
+	    Button btn1 = buttonGrid[1][1]; 
+        btn1.setStyle("-fx-background-color: green;");
+	    while (distance > 1) {
+	        for (int[] dir : new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}) {
+	            int ni = i + dir[0];
+	            int nj = j + dir[1];
+
+	            if (ni >= 0 && nj >= 0 && ni < maze.getHeight() && nj < maze.getWidth()) {
+	                if (grid[ni][nj] == distance - 1) {
+	                    i = ni;
+	                    j = nj;
+	                    pathButtons.add(buttonGrid[i][j]);
+	                    distance--;
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	    //pas à pas
+	    Timeline timeline = new Timeline();
+	    for (int k = 0; k < pathButtons.size(); k++) {
+	        Button btn = pathButtons.get(k);
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis(200 * k), e -> {
+	            btn.setStyle("-fx-background-color: green;");
+	        });
+	        timeline.getKeyFrames().add(keyFrame);
+	    }
+
+	    // la premeire case est affiché directment
+	    buttonGrid[1][1].setStyle("-fx-background-color: green;");
+
+	    timeline.play();
+	}
+	
+	
+	public void resDfs(){
+		
+	}
 
    }
 	
-
