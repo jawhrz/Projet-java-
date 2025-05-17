@@ -13,8 +13,9 @@ import java.util.*;
 public class Main extends Application {
 			
 	Button showPathButton = new Button("BFS");
+	Button showPathButtonAnimation = new Button("BFS pas à pas");
 	private MazeGenerator currentMaze;
-	private resolution res = new resolution();
+	private Resolution res = new Resolution();
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,15 +30,24 @@ public class Main extends Application {
         Button perfectSlow = new Button("Parfait - Pas à pas");
         Button imperfectFast = new Button("Imparfait - Complet");
         Button imperfectSlow = new Button("Imparfait - Pas à pas");
+        HBox hiddenButton = new HBox(2);
         
         showPathButton.setVisible(false); // bouton caché
+        showPathButtonAnimation.setVisible(false);
         showPathButton.setOnAction(e -> {
             if (currentMaze != null) {
                 res.resDistance(currentMaze);
                 res.highlightShortestPath(currentMaze);
             }
         });
-        root.setBottom(showPathButton);
+        showPathButtonAnimation.setOnAction(e -> {
+            if (currentMaze != null) {
+                res.resDistance(currentMaze);
+                res.highlightShortestPathAnimation(currentMaze);
+            }
+        });
+        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation);
+        root.setBottom(hiddenButton);
 
         
         HBox controls = new HBox(10);
@@ -74,6 +84,7 @@ public class Main extends Application {
             currentMaze = newMaze;
             root.setCenter(currentMaze.getGridPane());
             showPathButton.setVisible(true); // le bouton devient visible après génération
+            showPathButtonAnimation.setVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
         }
