@@ -18,6 +18,13 @@ public class Main extends Application {
 	Button showPathButton = new Button("BFS");
 	Button showPathButtonAnimation = new Button("BFS pas à pas");
 	Button showUnderGround = new Button("Bouttons traités");
+
+	Button showPathButtonDFS = new Button("DFS");
+	Button showPathButtonAnimationDFS = new Button("DFS pas à pas");
+	Button showUnderGroundDFS = new Button("Bouttons traités DFS");
+	
+	Button reset= new Button("reset");
+	
 	private MazeGenerator currentMaze;
 	private Resolution res = new Resolution();
 
@@ -36,7 +43,7 @@ public class Main extends Application {
         Button imperfectSlow = new Button("Imparfait - Pas à pas");
 	Button saveMaze = new Button("Sauvegarder");
         Button loadMaze = new Button("Charger");
-        HBox hiddenButton = new HBox(3);
+        HBox hiddenButton = new HBox(10);
         
         showPathButton.setVisible(false); // bouton caché
         showPathButtonAnimation.setVisible(false);
@@ -60,7 +67,36 @@ public class Main extends Application {
             }
         });
         
-        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation,showUnderGround);
+        showPathButtonDFS.setVisible(false); // bouton caché
+        showPathButtonAnimationDFS.setVisible(false);
+        showUnderGroundDFS.setVisible(false);
+        showPathButtonDFS.setOnAction(e -> {
+            if (currentMaze != null) {
+                res.DFS(currentMaze);
+                res.highlightShortestPath(currentMaze);
+            }
+        });
+        showPathButtonAnimationDFS.setOnAction(e -> {
+            if (currentMaze != null) {
+                res.DFS(currentMaze);
+                res.highlightShortestPathAnimation(currentMaze);
+            }
+        });
+        
+        showUnderGroundDFS.setOnAction(e -> {
+            if (currentMaze != null) {
+                res.resDistanceSlowDFS(currentMaze);
+            }
+        });
+        
+        reset.setVisible(false);
+        reset.setOnAction(e->{
+        	if(currentMaze!=null) {
+        		res.reset(currentMaze);
+        	}
+        });
+        
+        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation,showUnderGround,showPathButtonDFS,showPathButtonAnimationDFS,showUnderGroundDFS,reset);
         root.setBottom(hiddenButton);
 
         
@@ -101,6 +137,10 @@ public class Main extends Application {
             showPathButton.setVisible(true); // le bouton devient visible après génération
             showPathButtonAnimation.setVisible(true);
             showUnderGround.setVisible(true);
+	    showPathButtonDFS.setVisible(true); // le bouton devient visible après génération
+            showPathButtonAnimationDFS.setVisible(true);
+            showUnderGroundDFS.setVisible(true);
+            reset.setVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
         }
