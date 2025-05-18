@@ -382,5 +382,170 @@ public class Resolution {
 		
 	}
 
+	 
+    public List<int[]> searchNeighborRight(int[] position, MazeGenerator maze, String direction) {
+        List<int[]> voisins = new ArrayList<>();
+        int[][] grid = maze.getMazeGrid();
+        int y = position[0];
+        int x = position[1];
+        int height = grid.length;
+        int width = grid[0].length;
+
+        // Ordre inversé pour DFS (derrière, gauche, devant, droite)
+        int[][] directions;
+
+        switch (direction) {
+            case "N":
+                // droite (E), devant (N), gauche (W), derrière (S)
+                // ordre inversé → S, W, N, E
+                directions = new int[][]{{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+                break;
+            case "E":
+                // droite (S), devant (E), gauche (N), derrière (W)
+                directions = new int[][]{{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+                break;
+            case "S":
+                // droite (W), devant (S), gauche (E), derrière (N)
+                directions = new int[][]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+                break;
+            case "W":
+                // droite (N), devant (W), gauche (S), derrière (E)
+                directions = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+                break;
+            default:
+                directions = new int[][]{};
+        }
+
+        for (int[] d : directions) {
+            int ny = y + d[0];
+            int nx = x + d[1];
+            if (ny >= 0 && ny < height && nx >= 0 && nx < width && grid[ny][nx] != -1) {
+                voisins.add(new int[]{ny, nx});
+            }
+        }
+
+        return voisins;
+    }
+
+    public List<int[]> resRight(MazeGenerator maze) {
+        List<int[]> dejavu = new ArrayList<>();
+        List<int[]> atraiter = new ArrayList<>();
+        List<String> directions = new ArrayList<>();
+
+        int[][] grid = maze.getMazeGrid(); 
+        int height = maze.getHeight();
+        int width = maze.getWidth();
+        initDistance(maze);
+
+        int[] courant = {1, 1};
+        int[] arrivee = {height - 2, width - 2};
+        dejavu.add(courant);
+        atraiter.add(courant);
+        directions.add("E"); // départ vers la droite
+
+        while (!atraiter.isEmpty() && !contains(dejavu, arrivee)) {
+            courant = atraiter.remove(atraiter.size() - 1);
+            String dir = directions.remove(directions.size() - 1);
+            List<int[]> voisins = searchNeighborRight(courant, maze, dir);
+
+            for (int[] voisin : voisins) {
+                if (!contains(dejavu, voisin)) {
+                    atraiter.add(voisin);
+                    directions.add(updateDirection(courant, voisin));
+                    dejavu.add(voisin);
+                }
+            }
+        }
+
+        return dejavu;
+    }
+
+    
+
+
+
+
+    
+    public void highlightPathRight(MazeGenerator maze) {
+    	List<int[]> dejavu=resRight(maze);    
+    	Button[][] buttonGrid=maze.getButtonGrid();
+    	for (int[] dejaVu: dejavu) {
+    		buttonGrid[dejaVu[0]][dejaVu[1]].setStyle("-fx-background-color: green;");
+    	}
+    }
+    
+    public String updateDirection(int[] from, int[] to) {
+        int dy = to[0] - from[0];
+        int dx = to[1] - from[1];
+
+        if (dy == -1 && dx == 0) return "N";
+        if (dy == 1 && dx == 0) return "S";
+        if (dy == 0 && dx == 1) return "E";
+        if (dy == 0 && dx == -1) return "W";
+
+        return "E"; // par défaut
+    }
+
+
+    
+    public boolean contains(List<int[]> liste, int[] element) {
+    	boolean dejaVu = false;
+        for (int[] elt : liste) {
+            if (elt[0] == element[0] && elt[1] == element[1]) {
+                dejaVu = true;
+                return dejaVu;
+            }
+        }  
+        return dejaVu;
+    }
+    
+
+
+    public List<int[]> resRightAnimation(MazeGenerator maze) {
+        List<int[]> dejavu = new ArrayList<>();
+        List<int[]> atraiter = new ArrayList<>();
+        List<String> directions = new ArrayList<>();
+        Button[][] buttonGrid=maze.getButtonGrid();
+        int[][] grid = maze.getMazeGrid(); 
+        int height = maze.getHeight();
+        int width = maze.getWidth();
+        initDistance(maze);
+
+        int[] courant = {1, 1};
+        int[] arrivee = {height - 2, width - 2};
+        dejavu.add(courant);
+        atraiter.add(courant);
+        directions.add("E"); // départ vers la droite
+
+        while (!atraiter.isEmpty() && !contains(dejavu, arrivee)) {
+            courant = atraiter.remove(atraiter.size() - 1);
+            String dir = directions.remove(directions.size() - 1);
+            List<int[]> voisins = searchNeighborRight(courant, maze, dir);
+
+            for (int[] voisin : voisins) {
+                if (!contains(dejavu, voisin)) {
+                    atraiter.add(voisin);
+                    directions.add(updateDirection(courant, voisin));
+                    dejavu.add(voisin);
+                }
+            }
+        }
+        for (int[] pastraiter: atraiter) {
+        	dejavu.remove(pastraiter);
+        }
+        dejavu.add(arrivee);
+        Timeline timeline= new Timeline();
+	    for (int k=0;k<dejavu.size();k++) {
+	    	Button btn=buttonGrid[dejavu.get(k)[0]][dejavu.get(k)[1]];
+	    	KeyFrame keyFrame= new KeyFrame(Duration.millis(500*k),e-> {
+	    		btn.setStyle("-fx-background-color: green;");
+	    	});
+	    	timeline.getKeyFrames().add(keyFrame);
+	    }
+	    timeline.play();
+        return dejavu;
+    }
+
+
    }
 	
