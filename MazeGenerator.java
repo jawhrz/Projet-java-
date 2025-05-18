@@ -289,7 +289,7 @@ public class MazeGenerator {
 	        }
     }}
 
-    private void colorButton(Button btn, int value) { // donne la couleur en fonction
+    public void colorButton(Button btn, int value) { // donne la couleur en fonction
         if (value == -1) {
             btn.setStyle("-fx-background-color: black;");
         } else {
