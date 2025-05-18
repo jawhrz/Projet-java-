@@ -18,10 +18,13 @@ public class Main extends Application {
 	Button showPathButton = new Button("BFS");
 	Button showPathButtonAnimation = new Button("BFS pas à pas");
 	Button showUnderGround = new Button("Bouttons traités");
-
+	
 	Button showPathButtonDFS = new Button("DFS");
 	Button showPathButtonAnimationDFS = new Button("DFS pas à pas");
 	Button showUnderGroundDFS = new Button("Bouttons traités DFS");
+
+	Button resRight=new Button("réso par droite");
+	Button resRightAnimation= new Button ("réso droite animé");
 	
 	Button reset= new Button("reset");
 	
@@ -44,7 +47,10 @@ public class Main extends Application {
 	Button saveMaze = new Button("Sauvegarder");
         Button loadMaze = new Button("Charger");
         HBox hiddenButton = new HBox(10);
-        
+
+
+	resRightAnimation.setVisible(false);
+        resRight.setVisible(false);
         showPathButton.setVisible(false); // bouton caché
         showPathButtonAnimation.setVisible(false);
         showUnderGround.setVisible(false);
@@ -88,6 +94,15 @@ public class Main extends Application {
                 res.resDistanceSlowDFS(currentMaze);
             }
         });
+
+	resRight.setOnAction(e->{
+        	res.resRight(currentMaze);
+        	res.highlightPathRight(currentMaze);
+        });
+        
+        resRightAnimation.setOnAction(e->{
+        	res.resRightAnimation(currentMaze);
+        });
         
         reset.setVisible(false);
         reset.setOnAction(e->{
@@ -96,7 +111,7 @@ public class Main extends Application {
         	}
         });
         
-        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation,showUnderGround,showPathButtonDFS,showPathButtonAnimationDFS,showUnderGroundDFS,reset);
+        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation,showUnderGround,showPathButtonDFS,showPathButtonAnimationDFS,showUnderGroundDFS,resRight,resRightAnimation,reset);
         root.setBottom(hiddenButton);
 
         
@@ -140,6 +155,8 @@ public class Main extends Application {
 	    showPathButtonDFS.setVisible(true); // le bouton devient visible après génération
             showPathButtonAnimationDFS.setVisible(true);
             showUnderGroundDFS.setVisible(true);
+	    resRight.setVisible(true);
+            resRightAnimation.setVisible(true);
             reset.setVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
