@@ -257,7 +257,128 @@ public class Resolution {
 	
 	
 	
-	public void resDfs(){
+	public static void DFS (MazeGenerator maze) {
+	    List<int[]> dejaVu = new ArrayList<>();
+	    List<int[]> atraiter = new ArrayList<>();
+	    int[][] grid = maze.getMazeGrid(); 
+	    int height = maze.getHeight();
+	    int width = maze.getWidth();
+	    initDistance(maze);
+	    Button[][] buttonGrid = maze.getButtonGrid();
+
+	    int[] start = new int[] {height - 2, width - 1};
+	    atraiter.add(start);
+	    dejaVu.add(start);
+	    grid[start[0]][start[1]] = 1;
+
+	    while (grid[1][1] == 0 && !atraiter.isEmpty()) {
+	        // on prend le dernier ajouté
+	        int[] position = atraiter.remove(atraiter.size() - 1);
+	        int x = position[0];
+	        int y = position[1]; 
+	        int distance = grid[x][y];
+
+	        
+	        for (int[] neighbor : searchNeighbor(position, maze)) {
+	            int a = neighbor[0];
+	            int b = neighbor[1];
+
+	            boolean dejavu = false;
+	            for (int[] vu : dejaVu) {
+	                if (vu[0] == a && vu[1] == b) {
+	                    dejavu = true;
+	                    break;
+	                }
+	            }
+
+	            if (!dejavu) {
+	                grid[a][b] = distance + 1;
+	                dejaVu.add(new int[]{a, b});
+	                atraiter.add(new int[]{a, b});
+	            }
+	        }
+	    }
+	}
+	
+	
+	public static void resDistanceSlowDFS(MazeGenerator maze) {
+		List<Button> pathButtons = new ArrayList<>();
+		List<int[]> dejaVu = new ArrayList<>();
+	    List<int[]> atraiter = new ArrayList<>();
+	    int[][] grid = maze.getMazeGrid(); 
+	    int height = maze.getHeight();
+	    int width = maze.getWidth();
+	    initDistance(maze);
+	    Button[][] buttonGrid = maze.getButtonGrid();
+
+	    int[] start = new int[] {height - 2, width - 1};
+	    atraiter.add(start);
+	    dejaVu.add(start);
+	    grid[start[0]][start[1]] = 1;
+
+	    while (!atraiter.isEmpty()) {
+	        // on prend le dernier ajouté
+	        int[] position = atraiter.remove(atraiter.size() - 1);
+	        int x = position[0];
+	        int y = position[1]; 
+	        int distance = grid[x][y];
+
+	        if (x == 0 && y == 0) {
+	            // si on arrive au debut on arrete
+	            break;
+	        }
+
+	        for (int[] neighbor : searchNeighbor(position, maze)) {
+	            int a = neighbor[0];
+	            int b = neighbor[1];
+
+	            boolean dejavu = false;
+	            for (int[] vu : dejaVu) {
+	                if (vu[0] == a && vu[1] == b) {
+	                    dejavu = true;
+	                    break;
+	                }
+	            }
+
+	            if (!dejavu) {
+	                grid[a][b] = distance + 1;
+	                dejaVu.add(new int[]{a, b});
+	                atraiter.add(new int[]{a, b});
+	                pathButtons.add(buttonGrid[a][b]);
+	            }
+	        }
+	    }
+	    
+	    Timeline timeline = new Timeline();
+	    for (int k = 0; k < pathButtons.size(); k++) {
+	        Button btn = pathButtons.get(k);
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis(60 * k), e -> {
+	            btn.setStyle("-fx-background-color: red;");
+	        });
+	        timeline.getKeyFrames().add(keyFrame);
+	    }
+
+	    // la premeire case est affiché directment
+	    buttonGrid[1][1].setStyle("-fx-background-color: red;");
+
+	    timeline.play();
+	    
+	}
+	
+	public void reset(MazeGenerator maze) {
+		int[][] mazeGrid= maze.getMazeGrid();
+		Button[][] buttonGrid=maze.getButtonGrid();
+		int height = maze.getHeight();
+		int width = maze.getWidth();
+		initDistance(maze);
+		
+		for(int i=0;i<height;i++) {
+			for(int j=0;j<width;j++) {
+				if(mazeGrid[i][j]!=-1) {
+					maze.colorButton(buttonGrid[i][j], 0);
+				}
+			}
+		}
 		
 	}
 
