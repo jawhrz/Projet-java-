@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
-
+import java.util.Scanner;
 
 public class SaveMazeManager {
 	
@@ -16,9 +16,11 @@ public class SaveMazeManager {
     	int[][] mazeGrid = mazeToSave.getMazeGrid();
     	
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+        	writer.write(height+" "+width);
+        	writer.println();
         	for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
-                    writer.write(mazeGrid[i][j]+";");
+                    writer.write(mazeGrid[i][j]+" ");
                 }
                 writer.println();
             }
@@ -28,8 +30,17 @@ public class SaveMazeManager {
     }
 
     public static void loadMaze(File file, MazeGenerator mazeToLoad) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-           
+        try (Scanner scanner = new Scanner(file)) {
+           int height = scanner.nextInt();
+           int width = scanner.nextInt();
+           int[][] mazeGrid = new int[height][width];
+         
+           for (int i = 0; i < height; i++) {
+               for (int j = 0; j < width; j++) {
+            	   mazeGrid[i][j] = scanner.nextInt();
+               }
+           }
+          
         } catch (IOException e) {
             System.err.println("Erreur lors du chargement : " + e.getMessage());
         }
