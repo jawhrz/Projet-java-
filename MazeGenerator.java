@@ -33,12 +33,21 @@ public class MazeGenerator {
     private final int Speed;
     private final List<int[]> values;
     
-    public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive, int Speed) {
-        this.rows = rows;
-        this.cols = cols;
-        this.width = 2 * cols + 1;
-        this.height = 2 * rows + 1;
-        this.mazeGrid = new int[height][width];
+    public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive, int Speed,boolean isloaded,int[][] loadedMazeGrid) {
+    	if (!isloaded) {
+    		this.height = 2 * rows + 1;
+    	    this.width = 2 * cols + 1;
+    	    this.rows = rows;
+    	    this.cols = cols;
+    	    this.mazeGrid = new int[height][width];
+    	} else {
+    		 this.mazeGrid = loadedMazeGrid;
+     	    this.height = mazeGrid.length;
+     	    this.width = mazeGrid[0].length;
+     	    this.rows = (height - 1) / 2;
+     	    this.cols = (width - 1) / 2;
+    	}
+	    
         this.root = new GridPane();
         this.walls = new ArrayList<>();
         this.isPerfect = isPerfect;
@@ -47,24 +56,28 @@ public class MazeGenerator {
         this.buttonGrid = new Button[height][width];
         this.Speed=Speed;
 
-        initMazeGrid(); // remplacer dans mazegrid les murs par -1 et le reste par un autre nombre (de 1 a nombre de case blanche)
-        collectWalls(); //parcours tout les wall qui ne sont pas des coins 
-        Collections.shuffle(walls); //melange tout les murs pour que ce soit au hasard 
-        collectVallues();
-        Collections.shuffle(values);
-        if (isProgressive) {
-        	displayGrid();
-            generateMazeProgressively(Speed);
+       if (!isloaded) {
+		initMazeGrid(); // remplacer dans mazegrid les murs par -1 et le reste par un autre nombre (de 1 a nombre de case blanche)
+	        collectWalls(); //parcours tout les wall qui ne sont pas des coins 
+	        Collections.shuffle(walls); //melange tout les murs pour que ce soit au hasard 
+	        collectVallues();
+	        Collections.shuffle(values);
+	        if (isProgressive) {
+	        	displayGrid();
+	            generateMazeProgressively(Speed);
+	        } else {
+	            generateMazeInstantly(); //modifie seulement la mazegrid
+	            displayGrid();
+	        }
+	        
+	            for (int i = 0; i < height; i++) {
+	                for (int j = 0; j < width; j++) {
+	                    System.out.println(mazeGrid[i][j]);
+	                }
+	            }
         } else {
-            generateMazeInstantly(); //modifie seulement la mazegrid
-            displayGrid();
+            displayGrid(); // Si on charge une grille, il faut juste l’afficher
         }
-        
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    System.out.println(mazeGrid[i][j]);
-                }
-            }
 
     }
 
