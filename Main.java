@@ -146,7 +146,7 @@ public class Main extends Application {
                 Speed = Integer.parseInt(speedText);}
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed);
+            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed,false,null);
             currentMaze = newMaze;
             root.setCenter(currentMaze.getGridPane());
             showPathButton.setVisible(true); // le bouton devient visible après génération
