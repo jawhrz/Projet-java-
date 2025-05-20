@@ -27,13 +27,13 @@ public class Main extends Application {
 	Button resRightAnimation= new Button ("réso droite animé");
 	
 	Button reset= new Button("reset");
-	
+	BorderPane root;
 	private MazeGenerator currentMaze;
 	private Resolution res = new Resolution();
-
+	
     @Override
     public void start(Stage primaryStage) {
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
 
         TextField widthField = new TextField();
         TextField heightField = new TextField();
@@ -177,7 +177,11 @@ public class Main extends Application {
             if (isSave) {
                 SaveMazeManager.saveMaze(file,currentMaze);
             } else {
-                SaveMazeManager.loadMaze(file,currentMaze);
+               	currentMaze =  SaveMazeManager.loadMaze(file);
+		root.setCenter(currentMaze.getGridPane());
+                showPathButton.setVisible(true); // le bouton devient visible après génération
+                showPathButtonAnimation.setVisible(true);
+                showUnderGround.setVisible(true);
             }
         }
     }
