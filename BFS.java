@@ -151,8 +151,7 @@ public class BFS extends ResolutionFS{
 	        timeline.getKeyFrames().add(keyFrame);
 	    }
 
-	    // la premeire case est affiché directment
-	    buttonGrid[1][1].setStyle("-fx-background-color: red;");
+	    
 
 	    timeline.play();
 	    
@@ -226,8 +225,6 @@ public class BFS extends ResolutionFS{
 	        timeline.getKeyFrames().add(keyFrame);
 	    }
 
-	    // la premeire case est affiché directment
-	    buttonGrid[1][1].setStyle("-fx-background-color: green;");
 
 	    timeline.play();
 	}
@@ -260,4 +257,4 @@ public class BFS extends ResolutionFS{
 	        return dejaVu;
 	    }
 	    
-}
+}	
