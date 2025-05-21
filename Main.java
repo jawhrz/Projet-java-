@@ -75,6 +75,7 @@ public class Main extends Application {
                     alert.setHeaderText(null);
                     alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
                     alert.showAndWait();
+                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
                 }
             }
         });
@@ -95,6 +96,7 @@ public class Main extends Application {
                     alert.setHeaderText(null);
                     alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
                     alert.showAndWait();
+                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
                 }
             }
         });
@@ -117,7 +119,7 @@ public class Main extends Application {
                 if (currentMaze.getMazeGrid()[1][1] != 0) {
                     dfs.highlightPath(currentMaze);
                     nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
-                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
+                    nbCasePath.setText("nombre case chemin" + dfs.nbPath);
                 } else {
                     // Pas de solution trouvée => affichage message
                     javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
@@ -125,6 +127,7 @@ public class Main extends Application {
                     alert.setHeaderText(null);
                     alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
                     alert.showAndWait();
+                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
                 }
             }
         });
@@ -142,6 +145,7 @@ public class Main extends Application {
                     alert.setHeaderText(null);
                     alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
                     alert.showAndWait();
+                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
                 }
             }
         });
@@ -166,6 +170,8 @@ public class Main extends Application {
                 alert.setHeaderText(null);
                 alert.setContentText("Aucune solution trouvée avec la méthode droite.");
                 alert.showAndWait();
+                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
+
             }
         });
         
@@ -181,6 +187,8 @@ public class Main extends Application {
                 alert.setHeaderText(null);
                 alert.setContentText("Aucune solution trouvée avec la méthode droite.");
                 alert.showAndWait();
+                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
+
             }
         });
         
