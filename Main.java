@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -15,103 +16,125 @@ import java.util.*;
 
 public class Main extends Application {
 			
-	Button showPathButton = new Button("BFS");
-	Button showPathButtonAnimation = new Button("BFS pas à pas");
-	Button showUnderGround = new Button("Bouttons traités");
+	Button buttonBfs = new Button("BFS");
+	Button buttonBfsAnimation = new Button("BFS pas à pas");
+	Button showUnderGroundBFS = new Button("Bouttons traités");
 	
-	Button showPathButtonDFS = new Button("DFS");
-	Button showPathButtonAnimationDFS = new Button("DFS pas à pas");
+	Button buttonDfs = new Button("DFS");
+	Button buttonAnimationDfs = new Button("DFS pas à pas");
 	Button showUnderGroundDFS = new Button("Bouttons traités DFS");
 
-	Button resRight=new Button("réso par droite");
-	Button resRightAnimation= new Button ("réso droite animé");
+	Button buttonRight=new Button("réso par droite");
+	Button buttonRightAnimation= new Button ("réso droite animé");
 	
 	Button reset= new Button("reset");
 	BorderPane root;
 	private MazeGenerator currentMaze;
-	private Resolution res = new Resolution();
+	private BFS bfs = new BFS();
+	private DFS dfs = new DFS();
+	private Right right = new Right();
 	
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
 
+        Label nbCasetraite= new Label("nombre case traitée:");
+        Label nbCasePath= new Label("nombre case chemin" );
+        
         TextField widthField = new TextField();
         TextField heightField = new TextField();
         TextField speed = new TextField();
-        
 
         Button perfectFast = new Button("Parfait - Complet");
         Button perfectSlow = new Button("Parfait - Pas à pas");
         Button imperfectFast = new Button("Imparfait - Complet");
         Button imperfectSlow = new Button("Imparfait - Pas à pas");
-	Button saveMaze = new Button("Sauvegarder");
+        Button saveMaze = new Button("Sauvegarder");
         Button loadMaze = new Button("Charger");
         HBox hiddenButton = new HBox(10);
 
 
-	resRightAnimation.setVisible(false);
-        resRight.setVisible(false);
-        showPathButton.setVisible(false); // bouton caché
-        showPathButtonAnimation.setVisible(false);
-        showUnderGround.setVisible(false);
-        showPathButton.setOnAction(e -> {
+        buttonRightAnimation.setVisible(false);
+        buttonRight.setVisible(false);
+        buttonBfs.setVisible(false); // bouton caché
+        buttonBfsAnimation.setVisible(false);
+        showUnderGroundBFS.setVisible(false);
+        buttonBfs.setOnAction(e -> {
             if (currentMaze != null) {
-                res.resDistance(currentMaze);
-                res.highlightShortestPath(currentMaze);
+                bfs.bfs(currentMaze);
+                bfs.highlightPath(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
+
             }
         });
-        showPathButtonAnimation.setOnAction(e -> {
+        buttonBfsAnimation.setOnAction(e -> {
             if (currentMaze != null) {
-                res.resDistance(currentMaze);
-                res.highlightShortestPathAnimation(currentMaze);
+                bfs.bfs(currentMaze);
+                bfs.highlightPathAnimation(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
             }
         });
         
-        showUnderGround.setOnAction(e -> {
+        showUnderGroundBFS.setOnAction(e -> {
             if (currentMaze != null) {
-                res.resDistanceSlow(currentMaze);
+                bfs.bfsAnimation(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
             }
         });
         
-        showPathButtonDFS.setVisible(false); // bouton caché
-        showPathButtonAnimationDFS.setVisible(false);
+        buttonDfs.setVisible(false); // bouton caché
+        buttonAnimationDfs.setVisible(false);
         showUnderGroundDFS.setVisible(false);
-        showPathButtonDFS.setOnAction(e -> {
+        
+        buttonDfs.setOnAction(e -> {
             if (currentMaze != null) {
-                res.DFS(currentMaze);
-                res.highlightShortestPath(currentMaze);
+                dfs.DFS(currentMaze);
+                dfs.highlightPath(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
             }
         });
-        showPathButtonAnimationDFS.setOnAction(e -> {
+        buttonAnimationDfs.setOnAction(e -> {
             if (currentMaze != null) {
-                res.DFS(currentMaze);
-                res.highlightShortestPathAnimation(currentMaze);
+                dfs.DFS(currentMaze);
+                dfs.highlightPathAnimation(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
             }
         });
         
         showUnderGroundDFS.setOnAction(e -> {
             if (currentMaze != null) {
-                res.resDistanceSlowDFS(currentMaze);
+                dfs.resDistanceSlowDFS(currentMaze);
+                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
+                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
             }
         });
 
-	resRight.setOnAction(e->{
-        	res.resRight(currentMaze);
-        	res.highlightPathRight(currentMaze);
+        buttonRight.setOnAction(e->{
+        	right.resRight(currentMaze);
+        	right.highlightPath(currentMaze);
+        	nbCasetraite.setText("nombre case traitée:"+right.nbCase);
+            nbCasePath.setText("nombre case chemin" +right.nbPath);
         });
         
-        resRightAnimation.setOnAction(e->{
-        	res.resRightAnimation(currentMaze);
+        buttonRightAnimation.setOnAction(e->{
+        	right.resRightAnimation(currentMaze);
+        	nbCasetraite.setText("nombre case traitée:"+right.nbCase);
+            nbCasePath.setText("nombre case chemin" +right.nbPath);
         });
         
         reset.setVisible(false);
         reset.setOnAction(e->{
         	if(currentMaze!=null) {
-        		res.reset(currentMaze);
+        		currentMaze.reset(currentMaze);
         	}
         });
         
-        hiddenButton.getChildren().addAll(showPathButton,showPathButtonAnimation,showUnderGround,showPathButtonDFS,showPathButtonAnimationDFS,showUnderGroundDFS,resRight,resRightAnimation,reset);
+        hiddenButton.getChildren().addAll(buttonBfs,buttonBfsAnimation,showUnderGroundBFS,buttonDfs,buttonAnimationDfs,showUnderGroundDFS,buttonRight,buttonRightAnimation,reset,nbCasetraite,nbCasePath);
         root.setBottom(hiddenButton);
 
         
@@ -123,6 +146,7 @@ public class Main extends Application {
                 perfectFast, perfectSlow, imperfectFast, imperfectSlow,saveMaze,loadMaze
         );
         root.setTop(controls);
+        
 
         
         perfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, true, false,speed));
@@ -149,14 +173,14 @@ public class Main extends Application {
             MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed,false,null);
             currentMaze = newMaze;
             root.setCenter(currentMaze.getGridPane());
-            showPathButton.setVisible(true); // le bouton devient visible après génération
-            showPathButtonAnimation.setVisible(true);
-            showUnderGround.setVisible(true);
-	    showPathButtonDFS.setVisible(true); // le bouton devient visible après génération
-            showPathButtonAnimationDFS.setVisible(true);
+            buttonBfs.setVisible(true); // le bouton devient visible après génération
+            buttonBfsAnimation.setVisible(true);
+            showUnderGroundBFS.setVisible(true);
+            buttonDfs.setVisible(true); // le bouton devient visible après génération
+            buttonAnimationDfs.setVisible(true);
             showUnderGroundDFS.setVisible(true);
-	    resRight.setVisible(true);
-            resRightAnimation.setVisible(true);
+            buttonRight.setVisible(true);
+            buttonRightAnimation.setVisible(true);
             reset.setVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
@@ -179,9 +203,9 @@ public class Main extends Application {
             } else {
                	currentMaze =  SaveMazeManager.loadMaze(file);
 		root.setCenter(currentMaze.getGridPane());
-                showPathButton.setVisible(true); // le bouton devient visible après génération
-                showPathButtonAnimation.setVisible(true);
-                showUnderGround.setVisible(true);
+                buttonBfs.setVisible(true); // le bouton devient visible après génération
+                buttonBfsAnimation.setVisible(true);
+                showUnderGroundBFS.setVisible(true);
             }
         }
     }
