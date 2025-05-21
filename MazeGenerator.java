@@ -333,4 +333,26 @@ public class MazeGenerator {
     public Button[][] getButtonGrid(){
     	return this.buttonGrid;
     }
+	 public void reset(MazeGenerator maze) {
+		int[][] mazeGrid= maze.getMazeGrid();
+		Button[][] buttonGrid=maze.getButtonGrid();
+		int height = maze.getHeight();
+		int width = maze.getWidth();
+        int[][] grid = maze.getMazeGrid();
+        for (int i = 0; i < maze.getHeight()-1; i++) {
+               for (int j = 0; j < maze.getWidth()-1; j++) {
+                   if(grid [i] [j]!=-1) {
+                       grid [i] [j]=0;
+                   }
+               }
+        }		
+		for(int i=0;i<height;i++) {
+			for(int j=0;j<width;j++) {
+				if(mazeGrid[i][j]!=-1) {
+					maze.colorButton(buttonGrid[i][j], 0);
+				}
+			}
+		}
+		
+	}
 }
