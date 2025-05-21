@@ -117,7 +117,7 @@ public class DFS extends ResolutionFS{
 	    dejaVu.add(start);
 	    grid[start[0]][start[1]] = 1;
 
-	    while (!atraiter.isEmpty() ) {
+	    while (!atraiter.isEmpty() && grid[1][1]==0) {
 	        // on prend le dernier ajouté
 	        int[] position = atraiter.remove(atraiter.size() - 1);
 	        int x = position[0];
@@ -153,8 +153,7 @@ public class DFS extends ResolutionFS{
 	        timeline.getKeyFrames().add(keyFrame);
 	    }
 
-	    // la premeire case est affiché directment
-	    buttonGrid[1][1].setStyle("-fx-background-color: red;");
+	    
 
 	    timeline.play();
 	    
@@ -227,9 +226,7 @@ public class DFS extends ResolutionFS{
 	        timeline.getKeyFrames().add(keyFrame);
 	    }
 
-	    // la premeire case est affiché directment
-	    buttonGrid[1][1].setStyle("-fx-background-color: green;");
-
+	  
 	    timeline.play();
 	}
 
