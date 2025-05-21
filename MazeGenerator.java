@@ -265,8 +265,8 @@ public class MazeGenerator {
             for (int j = 0; j < width; j++) {
                 Button btn = new Button(); 
                 buttonGrid[i][j]=btn;
-                btn.setMinSize(20, 20);
-                btn.setMaxSize(20, 20);
+                btn.setMinSize(600.0/height, 600.0/width);
+                btn.setMaxSize(600.0/height, 600.0/width);
                 colorButton(btn, mazeGrid[i][j]);
 
                 int x = i;
