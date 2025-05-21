@@ -1,3 +1,4 @@
+
 package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -91,7 +92,7 @@ public class Right extends Resolution{
 	        nbCase=1;
 	        nbPath=1;
 	        int[] courant = {1, 1};
-	        int[] arrivee = {height - 2, width - 2};
+	        int[] arrivee = {height - 2, width - 1};
 	        dejavu.add(courant);
 	        atraiter.add(courant);
 	        directions.add("E"); // départ vers la droite
@@ -116,6 +117,7 @@ public class Right extends Resolution{
 	        	nbCase--;
 	        	nbPath--;
 	        }
+	        dejavu.add(arrivee);
 
 	        return dejavu;
 	    }
@@ -145,7 +147,7 @@ public class Right extends Resolution{
 	        nbCase=1;
 	        nbPath=1;
 	        int[] courant = {1, 1};
-	        int[] arrivee = {height - 2, width - 2};
+	        int[] arrivee = {height - 2, width - 1};
 	        dejavu.add(courant);
 	        atraiter.add(courant);
 	        directions.add("E"); // départ vers la droite
@@ -197,6 +199,7 @@ public class Right extends Resolution{
 					}
 				}
 			}
+			buttonGrid[1][0].setStyle("-fx-background-color : green");
 			
 		}
 	    
