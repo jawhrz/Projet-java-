@@ -67,7 +67,7 @@ public class BFS extends ResolutionFS{
 	}
 	
 	public void bfs(MazeGenerator maze) {
-		nbCase=0;
+		nbCase=1;
 	    int height = maze.getHeight();
 	    int width = maze.getWidth();
 	    int[][] grid = maze.getMazeGrid();
@@ -81,7 +81,6 @@ public class BFS extends ResolutionFS{
 	    grid[position[0]][position[1]] = distance;
 	    atraiter.add(position);
 	    dejavu.add(position);
-	    nbCase++;
 	    while (grid[1][1] == 0 && !atraiter.isEmpty()) {
 	        int size = atraiter.size();
 	        distance++; // on augmente la distance à chaque "couche"
@@ -104,7 +103,7 @@ public class BFS extends ResolutionFS{
 	}
 	
 	public void bfsAnimation(MazeGenerator maze) {
-		nbCase=0;
+		nbCase=1;
 	    int height = maze.getHeight();
 	    int width = maze.getWidth();
 	    int[][] grid = maze.getMazeGrid();
@@ -192,7 +191,7 @@ public class BFS extends ResolutionFS{
 	    int[][] grid = maze.getMazeGrid();
         Button[][] buttonGrid=maze.getButtonGrid();
         List<Button> pathButtons = new ArrayList<>();
-        
+        nbPath=1;
 	    int i = 1;
 	    int j = 1;
 	    int distance = grid[i][j];
@@ -209,6 +208,7 @@ public class BFS extends ResolutionFS{
 	                    j = nj;
 	                    pathButtons.add(buttonGrid[i][j]);
 	                    distance--;
+	                    nbPath++;
 	                    break;
 	                }
 	            }
