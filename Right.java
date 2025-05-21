@@ -178,21 +178,22 @@ public class Right extends Resolution{
 	    }
 	    
 	    public void reset(MazeGenerator maze) {
-			int[][] mazeGrid= maze.getMazeGrid();
-			Button[][] buttonGrid=maze.getButtonGrid();
-			int height = maze.getHeight();
-			int width = maze.getWidth();
-			initDistance(maze);
-			
-			for(int i=0;i<height;i++) {
-				for(int j=0;j<width;j++) {
-					if(mazeGrid[i][j]!=-1) {
-						maze.colorButton(buttonGrid[i][j], 0);
-					}
+		int[][] mazeGrid= maze.getMazeGrid();
+		Button[][] buttonGrid=maze.getButtonGrid();
+		int height = maze.getHeight();
+		int width = maze.getWidth();
+		initDistance(maze);
+		
+		for(int i=0;i<height;i++) {
+			for(int j=0;j<width;j++) {
+				if(mazeGrid[i][j]!=-1) {
+					maze.colorButton(buttonGrid[i][j], 0);
 				}
 			}
-			
 		}
+		buttonGrid[1][0].setStyle("-fx-background-color: green;");
+		
+	}
 	    
 	    public boolean contains(List<int[]> liste, int[] element) {
 	    	boolean dejaVu = false;
