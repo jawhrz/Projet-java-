@@ -66,7 +66,7 @@ public class DFS extends ResolutionFS{
 	}
 	
 	public void DFS(MazeGenerator maze) {
-		int nbCase=1;
+		nbCase=1;
 	    List<int[]> dejaVu = new ArrayList<>();
 	    List<int[]> atraiter = new ArrayList<>();
 	    int[][] grid = maze.getMazeGrid(); 
@@ -162,7 +162,7 @@ public class DFS extends ResolutionFS{
 	public void highlightPath(MazeGenerator maze) {
 	    int[][] grid = maze.getMazeGrid();
         Button[][] buttonGrid=maze.getButtonGrid();
-        nbCase=1;
+        nbPath=1;
 	    int i = 1;
 	    int j = 1;
 	    int distance = grid[i][j];
@@ -180,7 +180,7 @@ public class DFS extends ResolutionFS{
 	                    Button btn = buttonGrid[i][j]; 
 	                    btn.setStyle("-fx-background-color: green;");
 	                    distance--;
-	                    nbCase++;
+	                    nbPath++;
 	                    break;
 	                }
 	            }
@@ -247,7 +247,6 @@ public class DFS extends ResolutionFS{
 				}
 			}
 		}
-		buttonGrid[1][0].setStyle("-fx-background-color: green;");
 		
 	}
 	
