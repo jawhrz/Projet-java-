@@ -246,7 +246,6 @@ public class BFS extends ResolutionFS{
 				}
 			}
 		}
-		buttonGrid[1][0].setStyle("-fx-background-color: green;");
 		
 	}
 	
