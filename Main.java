@@ -60,12 +60,22 @@ public class Main extends Application {
         buttonBfsAnimation.setVisible(false);
         showUnderGroundBFS.setVisible(false);
         buttonBfs.setOnAction(e -> {
-            if (currentMaze != null) {
-                bfs.bfs(currentMaze);
-                bfs.highlightPath(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
+        	if (currentMaze != null) {
+                bfs.bfs(currentMaze); 
 
+                // on vérifie la case départ (1,1) 
+                if (currentMaze.getMazeGrid()[1][1] != 0) {
+                    bfs.highlightPath(currentMaze);
+                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
+                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
+                } else {
+                    // Pas de solution trouvée => affichage message
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                    alert.setTitle("Résultat");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
+                    alert.showAndWait();
+                }
             }
         });
         buttonBfsAnimation.setOnAction(e -> {
@@ -74,6 +84,18 @@ public class Main extends Application {
                 bfs.highlightPathAnimation(currentMaze);
                 nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
                 nbCasePath.setText("nombre case chemin" +bfs.nbPath);
+                if (currentMaze.getMazeGrid()[1][1] != 0) {
+                    bfs.highlightPath(currentMaze);
+                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
+                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
+                } else {
+                    // Pas de solution trouvée => affichage message
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                    alert.setTitle("Résultat");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
+                    alert.showAndWait();
+                }
             }
         });
         
@@ -92,17 +114,35 @@ public class Main extends Application {
         buttonDfs.setOnAction(e -> {
             if (currentMaze != null) {
                 dfs.DFS(currentMaze);
-                dfs.highlightPath(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
+                if (currentMaze.getMazeGrid()[1][1] != 0) {
+                    dfs.highlightPath(currentMaze);
+                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
+                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
+                } else {
+                    // Pas de solution trouvée => affichage message
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                    alert.setTitle("Résultat");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
+                    alert.showAndWait();
+                }
             }
         });
         buttonAnimationDfs.setOnAction(e -> {
             if (currentMaze != null) {
                 dfs.DFS(currentMaze);
-                dfs.highlightPathAnimation(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
+                if (currentMaze.getMazeGrid()[1][1] != 0) {
+                	dfs.highlightPathAnimation(currentMaze);
+                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
+                    nbCasePath.setText("nombre case chemin" + dfs.nbPath);
+                } else {
+                    // Pas de solution trouvée => affichage message
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                    alert.setTitle("Résultat");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
+                    alert.showAndWait();
+                }
             }
         });
         
@@ -115,16 +155,33 @@ public class Main extends Application {
         });
 
         buttonRight.setOnAction(e->{
-        	right.resRight(currentMaze);
-        	right.highlightPath(currentMaze);
-        	nbCasetraite.setText("nombre case traitée:"+right.nbCase);
-            nbCasePath.setText("nombre case chemin" +right.nbPath);
+        	List<int[]> chemin = right.resRight(currentMaze);
+            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
+                right.highlightPath(currentMaze);
+                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
+                nbCasePath.setText("nombre case chemin" + right.nbPath);
+            } else {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Résultat");
+                alert.setHeaderText(null);
+                alert.setContentText("Aucune solution trouvée avec la méthode droite.");
+                alert.showAndWait();
+            }
         });
         
         buttonRightAnimation.setOnAction(e->{
-        	right.resRightAnimation(currentMaze);
-        	nbCasetraite.setText("nombre case traitée:"+right.nbCase);
-            nbCasePath.setText("nombre case chemin" +right.nbPath);
+        	List<int[]> chemin = right.resRight(currentMaze);
+            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
+                right.resRightAnimation(currentMaze);
+                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
+                nbCasePath.setText("nombre case chemin" + right.nbPath);
+            } else {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Résultat");
+                alert.setHeaderText(null);
+                alert.setContentText("Aucune solution trouvée avec la méthode droite.");
+                alert.showAndWait();
+            }
         });
         
         reset.setVisible(false);
