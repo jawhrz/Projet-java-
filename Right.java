@@ -89,6 +89,7 @@ public class Right extends Resolution{
 	        int width = maze.getWidth();
 	        initDistance(maze);
 	        nbCase=1;
+	        nbPath=1;
 	        int[] courant = {1, 1};
 	        int[] arrivee = {height - 2, width - 2};
 	        dejavu.add(courant);
@@ -106,12 +107,14 @@ public class Right extends Resolution{
 	                    directions.add(updateDirection(courant, voisin));
 	                    dejavu.add(voisin);
 	                    nbCase++;
+	                    nbPath++;
 	                }
 	            }
 	        }
 	        for (int[] pastraiter: atraiter) {
 	        	dejavu.remove(pastraiter);
 	        	nbCase--;
+	        	nbPath--;
 	        }
 
 	        return dejavu;
@@ -140,6 +143,7 @@ public class Right extends Resolution{
 	        int width = maze.getWidth();
 	        initDistance(maze);
 	        nbCase=1;
+	        nbPath=1;
 	        int[] courant = {1, 1};
 	        int[] arrivee = {height - 2, width - 2};
 	        dejavu.add(courant);
@@ -157,12 +161,14 @@ public class Right extends Resolution{
 	                    directions.add(updateDirection(courant, voisin));
 	                    dejavu.add(voisin);
 	                    nbCase++;
+	                    nbPath++;
 	                }
 	            }
 	        }
 	        for (int[] pastraiter: atraiter) {
 	        	dejavu.remove(pastraiter);
 	        	nbCase--;
+	        	nbPath--;
 	        }
 	        dejavu.add(arrivee);
 	        Timeline timeline= new Timeline();
@@ -178,22 +184,21 @@ public class Right extends Resolution{
 	    }
 	    
 	    public void reset(MazeGenerator maze) {
-		int[][] mazeGrid= maze.getMazeGrid();
-		Button[][] buttonGrid=maze.getButtonGrid();
-		int height = maze.getHeight();
-		int width = maze.getWidth();
-		initDistance(maze);
-		
-		for(int i=0;i<height;i++) {
-			for(int j=0;j<width;j++) {
-				if(mazeGrid[i][j]!=-1) {
-					maze.colorButton(buttonGrid[i][j], 0);
+			int[][] mazeGrid= maze.getMazeGrid();
+			Button[][] buttonGrid=maze.getButtonGrid();
+			int height = maze.getHeight();
+			int width = maze.getWidth();
+			initDistance(maze);
+			
+			for(int i=0;i<height;i++) {
+				for(int j=0;j<width;j++) {
+					if(mazeGrid[i][j]!=-1) {
+						maze.colorButton(buttonGrid[i][j], 0);
+					}
 				}
 			}
+			
 		}
-		buttonGrid[1][0].setStyle("-fx-background-color: green;");
-		
-	}
 	    
 	    public boolean contains(List<int[]> liste, int[] element) {
 	    	boolean dejaVu = false;
