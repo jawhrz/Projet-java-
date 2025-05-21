@@ -69,6 +69,10 @@ public class MazeGenerator {
 	            generateMazeInstantly(); //modifie seulement la mazegrid
 	            displayGrid();
 	        }
+	        mazeGrid[height-2][width-1]=0;
+        	mazeGrid[1][0]=0;
+        	buttonGrid[height-2][width-1].setStyle("-fx-background-color: white;");
+       		buttonGrid[1][0].setStyle("-fx-background-color: green;");
 	        
 	            for (int i = 0; i < height; i++) {
 	                for (int j = 0; j < width; j++) {
@@ -78,6 +82,7 @@ public class MazeGenerator {
         } else {
             displayGrid(); // Si on charge une grille, il faut juste l’afficher
         }
+	
 
     }
 
@@ -296,7 +301,7 @@ public class MazeGenerator {
     private void changement(int i, int j) {
     	if (i!=0 && j!=0 && i!=height-1 && j!=width-1) {
 	    	if (mazeGrid[i][j] == -1) {
-	            mazeGrid[i][j] = mazeGrid[1][1];
+	            mazeGrid[i][j] = 0;
 	        } else {
 	            mazeGrid[i][j] = -1;
 	        }
