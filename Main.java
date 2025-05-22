@@ -2,280 +2,346 @@ package application;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
 import java.io.File;
-import java.util.*;
+import java.util.List;
 
 public class Main extends Application {
-			
-	Button buttonBfs = new Button("BFS");
-	Button buttonBfsAnimation = new Button("BFS pas à pas");
-	Button showUnderGroundBFS = new Button("Bouttons traités");
-	
-	Button buttonDfs = new Button("DFS");
-	Button buttonAnimationDfs = new Button("DFS pas à pas");
-	Button showUnderGroundDFS = new Button("Bouttons traités DFS");
 
-	Button buttonRight=new Button("réso par droite");
-	Button buttonRightAnimation= new Button ("réso droite animé");
-	
-	Button reset= new Button("reset");
-	BorderPane root;
-	private MazeGenerator currentMaze;
-	private BFS bfs = new BFS();
-	private DFS dfs = new DFS();
-	private Right right = new Right();
-	
+    Button buttonBfs = new Button("BFS");
+    Button buttonBfsAnimation = new Button("BFS pas à pas");
+    Button showUnderGroundBFS = new Button("Traités BFS");
+
+    Button buttonDfs = new Button("DFS");
+    Button buttonAnimationDfs = new Button("DFS pas à pas");
+    Button showUnderGroundDFS = new Button("Traités DFS");
+
+    Button buttonRight = new Button("Right");
+    Button buttonRightAnimation = new Button("Right pas à pas");
+    
+    Button buttonLeft = new Button("Left");
+    Button buttonLeftAnimation = new Button("Left pas à pas");
+
+    Button reset = new Button("Reset");
+
+    private BorderPane root;
+    private MazeGenerator currentMaze;
+    private final BFS bfs = new BFS();
+    private final DFS dfs = new DFS();
+    private final Right right = new Right();
+    private final Left left = new Left();
+
+
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
 
-        Label nbCasetraite= new Label("nombre case traitée:");
-        Label nbCasePath= new Label("nombre case chemin" );
-        
+        // Top controls
         TextField widthField = new TextField();
         TextField heightField = new TextField();
-        TextField speed = new TextField();
-
-        Button perfectFast = new Button("Parfait - Complet");
-        Button perfectSlow = new Button("Parfait - Pas à pas");
-        Button imperfectFast = new Button("Imparfait - Complet");
-        Button imperfectSlow = new Button("Imparfait - Pas à pas");
-        Button saveMaze = new Button("Sauvegarder");
+        TextField speedField = new TextField();
+        Button perfectFast = new Button("Parfait Complet");
+        Button perfectSlow = new Button("Parfait Pas à pas");
+        Button imperfectFast = new Button("Imparfait Complet");
+        Button imperfectSlow = new Button("Imparfait Pas à pas");
+        Button saveMaze = new Button("Sauver");
         Button loadMaze = new Button("Charger");
-        HBox hiddenButton = new HBox(10);
 
-
-        buttonRightAnimation.setVisible(false);
-        buttonRight.setVisible(false);
-        buttonBfs.setVisible(false); // bouton caché
-        buttonBfsAnimation.setVisible(false);
-        showUnderGroundBFS.setVisible(false);
-        buttonBfs.setOnAction(e -> {
-        	if (currentMaze != null) {
-                bfs.bfs(currentMaze); 
-
-                // on vérifie la case départ (1,1) 
-                if (currentMaze.getMazeGrid()[1][1] != 0) {
-                    bfs.highlightPath(currentMaze);
-                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
-                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
-                } else {
-                    // Pas de solution trouvée => affichage message
-                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                    alert.setTitle("Résultat");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
-                    alert.showAndWait();
-                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
-                }
-            }
-        });
-        buttonBfsAnimation.setOnAction(e -> {
-            if (currentMaze != null) {
-                bfs.bfs(currentMaze);
-                bfs.highlightPathAnimation(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
-                if (currentMaze.getMazeGrid()[1][1] != 0) {
-                    bfs.highlightPath(currentMaze);
-                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
-                    nbCasePath.setText("nombre case chemin" + bfs.nbPath);
-                } else {
-                    // Pas de solution trouvée => affichage message
-                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                    alert.setTitle("Résultat");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
-                    alert.showAndWait();
-                    nbCasetraite.setText("nombre case traitée:" + bfs.nbCase);
-                }
-            }
-        });
-        
-        showUnderGroundBFS.setOnAction(e -> {
-            if (currentMaze != null) {
-                bfs.bfsAnimation(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+bfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +bfs.nbPath);
-            }
-        });
-        
-        buttonDfs.setVisible(false); // bouton caché
-        buttonAnimationDfs.setVisible(false);
-        showUnderGroundDFS.setVisible(false);
-        
-        buttonDfs.setOnAction(e -> {
-            if (currentMaze != null) {
-                dfs.DFS(currentMaze);
-                if (currentMaze.getMazeGrid()[1][1] != 0) {
-                    dfs.highlightPath(currentMaze);
-                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
-                    nbCasePath.setText("nombre case chemin" + dfs.nbPath);
-                } else {
-                    // Pas de solution trouvée => affichage message
-                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                    alert.setTitle("Résultat");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
-                    alert.showAndWait();
-                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
-                }
-            }
-        });
-        buttonAnimationDfs.setOnAction(e -> {
-            if (currentMaze != null) {
-                dfs.DFS(currentMaze);
-                if (currentMaze.getMazeGrid()[1][1] != 0) {
-                	dfs.highlightPathAnimation(currentMaze);
-                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
-                    nbCasePath.setText("nombre case chemin" + dfs.nbPath);
-                } else {
-                    // Pas de solution trouvée => affichage message
-                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                    alert.setTitle("Résultat");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Aucune solution trouvée pour ce labyrinthe.");
-                    alert.showAndWait();
-                    nbCasetraite.setText("nombre case traitée:" + dfs.nbCase);
-                }
-            }
-        });
-        
-        showUnderGroundDFS.setOnAction(e -> {
-            if (currentMaze != null) {
-                dfs.resDistanceSlowDFS(currentMaze);
-                nbCasetraite.setText("nombre case traitée:"+dfs.nbCase);
-                nbCasePath.setText("nombre case chemin" +dfs.nbPath);
-            }
-        });
-
-        buttonRight.setOnAction(e->{
-        	List<int[]> chemin = right.resRight(currentMaze);
-            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
-                right.highlightPath(currentMaze);
-                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
-                nbCasePath.setText("nombre case chemin" + right.nbPath);
-            } else {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                alert.setTitle("Résultat");
-                alert.setHeaderText(null);
-                alert.setContentText("Aucune solution trouvée avec la méthode droite.");
-                alert.showAndWait();
-                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
-
-            }
-        });
-        
-        buttonRightAnimation.setOnAction(e->{
-        	List<int[]> chemin = right.resRight(currentMaze);
-            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
-                right.resRightAnimation(currentMaze);
-                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
-                nbCasePath.setText("nombre case chemin" + right.nbPath);
-            } else {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                alert.setTitle("Résultat");
-                alert.setHeaderText(null);
-                alert.setContentText("Aucune solution trouvée avec la méthode droite.");
-                alert.showAndWait();
-                nbCasetraite.setText("nombre case traitée:" + right.nbCase);
-
-            }
-        });
-        
-        reset.setVisible(false);
-        reset.setOnAction(e->{
-        	if(currentMaze!=null) {
-        		currentMaze.reset(currentMaze);
-        	}
-        });
-        
-        hiddenButton.getChildren().addAll(buttonBfs,buttonBfsAnimation,showUnderGroundBFS,buttonDfs,buttonAnimationDfs,showUnderGroundDFS,buttonRight,buttonRightAnimation,reset,nbCasetraite,nbCasePath);
-        root.setBottom(hiddenButton);
-
-        
-        HBox controls = new HBox(10);
-        controls.getChildren().addAll(
-                new Label("Largeur :"), widthField,
-                new Label("Hauteur :"), heightField,
-                new Label("Vitesse :"), speed,
-                perfectFast, perfectSlow, imperfectFast, imperfectSlow,saveMaze,loadMaze
+        HBox topControls = new HBox(10,
+                new Label("Largeur:"), widthField,
+                new Label("Hauteur:"), heightField,
+                new Label("Vitesse:"), speedField,
+                perfectFast, perfectSlow,
+                imperfectFast, imperfectSlow,
+                saveMaze, loadMaze
         );
-        root.setTop(controls);
-        
+        topControls.getStyleClass().add("top-controls");
+        root.setTop(topControls);
 
-        
-        perfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, true, false,speed));
-        perfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, true, true,speed));
-        imperfectFast.setOnAction(e -> generateMaze(root, widthField, heightField, false, false,speed));
-        imperfectSlow.setOnAction(e -> generateMaze(root, widthField, heightField, false, true,speed));
+        // Right panel: solving buttons
+        Label nbCaseTraite = new Label("Cases traitées: ");
+        Label nbCasePath = new Label("Cases chemin: ");
+        Label timeGeneration = new Label("Temps generation: ");
+        VBox solvingPanel = new VBox(
+                new Label("Résolutions:"),
+                buttonBfs, buttonBfsAnimation, showUnderGroundBFS,
+                buttonDfs, buttonAnimationDfs, showUnderGroundDFS,
+                buttonRight, buttonRightAnimation,
+                buttonLeft, buttonLeftAnimation,
+                reset, nbCaseTraite, nbCasePath,timeGeneration
+        );
+        solvingPanel.getStyleClass().add("solving-panel");
+        root.setRight(solvingPanel);
+
+        // Cacher les boutons au démarrage
+        setSolvingButtonsVisible(false);
+
+        // Gestion des actions
+        perfectFast.setOnAction(e -> generateMaze(widthField, heightField, true, false, speedField));
+        perfectSlow.setOnAction(e -> generateMaze(widthField, heightField, true, true, speedField));
+        imperfectFast.setOnAction(e -> generateMaze(widthField, heightField, false, false, speedField));
+        imperfectSlow.setOnAction(e -> generateMaze(widthField, heightField, false, true, speedField));
+
         saveMaze.setOnAction(e -> SelectFile(true));
         loadMaze.setOnAction(e -> SelectFile(false));
+
+        // Résolution BFS
+        buttonBfs.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();  // début
+
+            	bfs.bfs(currentMaze);               // ton appel à l'algorithme
+            	long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                if (currentMaze.getMazeGrid()[1][1] > 0 ) {
+                    bfs.highlightPath(currentMaze);
+                    
+                    nbCaseTraite.setText("Cases traitées: " + bfs.nbCase);
+                    nbCasePath.setText("Cases chemin: " + bfs.nbPath);
+                } else {
+                    showNoSolution(bfs.nbCase);
+                }
+            }
+        });
+
+        buttonBfsAnimation.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();
+                bfs.bfs(currentMaze);
+                bfs.highlightPathAnimation(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                
+                if (currentMaze.getMazeGrid()[1][1] > 0) {
+                    nbCaseTraite.setText("Cases traitées: " + bfs.nbCase);
+                    nbCasePath.setText("Cases chemin: " + bfs.nbPath);
+                } else {
+                    showNoSolution(bfs.nbCase);
+                }
+            }
+        });
+
+        showUnderGroundBFS.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();
+                bfs.bfsAnimation(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + bfs.nbCase);
+                nbCasePath.setText("Cases chemin: " + bfs.nbPath);
+            }
+        });
+
+        // Résolution DFS
+        buttonDfs.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();
+                dfs.DFS(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                if (currentMaze.getMazeGrid()[1][1] > 0) {
+                	
+                    dfs.highlightPath(currentMaze);
+                    
+                    nbCaseTraite.setText("Cases traitées: " + dfs.nbCase);
+                    nbCasePath.setText("Cases chemin: " + dfs.nbPath);
+                } else {
+                    showNoSolution(dfs.nbCase);
+                }
+            }
+        });
+
+        buttonAnimationDfs.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();
+                dfs.DFS(currentMaze);
+                dfs.highlightPathAnimation(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                if (currentMaze.getMazeGrid()[1][1] > 0) {
+                    nbCaseTraite.setText("Cases traitées: " + dfs.nbCase);
+                    nbCasePath.setText("Cases chemin: " + dfs.nbPath);
+                } else {
+                    showNoSolution(dfs.nbCase);
+                }
+            }
+        });
+
+        showUnderGroundDFS.setOnAction(e -> {
+            if (currentMaze != null) {
+            	long startTime = System.nanoTime();
+
+                dfs.resDistanceSlowDFS(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + dfs.nbCase);
+                nbCasePath.setText("Cases chemin: " + dfs.nbPath);
+            }
+        });
+
+        // Résolution Droite
+        buttonRight.setOnAction(e -> {
+        	long startTime = System.nanoTime();
+            List<int[]> chemin = right.resRight(currentMaze);
+            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
+
+                right.highlightPath(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + right.nbCase);
+                nbCasePath.setText("Cases chemin: " + right.nbPath);
+            } else {
+                showNoSolution(right.nbCase);
+            }
+        });
+
+        buttonRightAnimation.setOnAction(e -> {
+        	long startTime = System.nanoTime();
+            List<int[]> chemin = right.resRight(currentMaze);
+            if (right.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
+
+                right.resRightAnimation(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + right.nbCase);
+                nbCasePath.setText("Cases chemin: " + right.nbPath);
+            } else {
+                showNoSolution(right.nbCase);
+            }
+        });
         
-        Scene scene = new Scene(root, 800, 600);
+        buttonLeft.setOnAction(e -> {
+        	long startTime = System.nanoTime();
+            List<int[]> chemin = left.resLeft(currentMaze);
+            if (left.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2}) ) {
+
+                left.highlightPath(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + left.nbCase);
+                nbCasePath.setText("Cases chemin: " + left.nbPath);
+            } else {
+                showNoSolution(left.nbCase);
+            }
+        });
+
+        buttonLeftAnimation.setOnAction(e -> {
+        	long startTime = System.nanoTime();
+            List<int[]> chemin = left.resLeft(currentMaze);
+            if (left.contains(chemin, new int[]{currentMaze.getHeight() - 2, currentMaze.getWidth() - 2})) {
+
+                left.resLeftAnimation(currentMaze);
+                long endTime = System.nanoTime();    // fin
+            	long duration = endTime - startTime; // durée en nanosecondes
+
+            	timeGeneration.setText("Temps d'exécution : " + duration / 1_000_000.0 + " ms");
+                nbCaseTraite.setText("Cases traitées: " + left.nbCase);
+                nbCasePath.setText("Cases chemin: " + left.nbPath);
+            } else {
+                showNoSolution(left.nbCase);
+            }
+        });
+
+        reset.setOnAction(e -> {
+            if (currentMaze != null) currentMaze.reset(currentMaze);
+        });
+
+        Scene scene = new Scene(root, 1000, 700);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage.setTitle("Génération de labyrinthe");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void generateMaze(BorderPane root, TextField widthField, TextField heightField, boolean perfect, boolean progressive, TextField speed) {
+    private void generateMaze(TextField widthField, TextField heightField, boolean perfect, boolean progressive, TextField speedField) {
         try {
-        	String speedText = speed.getText();
-            int Speed = 0;
-            if (!speedText.isEmpty()) {
-                Speed = Integer.parseInt(speedText);}
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive,Speed,false,null);
+            int speed = speedField.getText().isEmpty() ? 0 : Integer.parseInt(speedField.getText());
+
+            if (width >= 100 || height >= 100) {
+                showAlert("Taille trop grande !");
+                return;
+            }
+
+            MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive, speed, false, null);
             currentMaze = newMaze;
             root.setCenter(currentMaze.getGridPane());
-            buttonBfs.setVisible(true); // le bouton devient visible après génération
-            buttonBfsAnimation.setVisible(true);
-            showUnderGroundBFS.setVisible(true);
-            buttonDfs.setVisible(true); // le bouton devient visible après génération
-            buttonAnimationDfs.setVisible(true);
-            showUnderGroundDFS.setVisible(true);
-            buttonRight.setVisible(true);
-            buttonRightAnimation.setVisible(true);
-            reset.setVisible(true);
+            setSolvingButtonsVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");
         }
     }
- private void SelectFile(boolean isSave) {
+
+    private void setSolvingButtonsVisible(boolean visible) {
+        buttonBfs.setVisible(visible);
+        buttonBfsAnimation.setVisible(visible);
+        showUnderGroundBFS.setVisible(visible);
+        buttonDfs.setVisible(visible);
+        buttonAnimationDfs.setVisible(visible);
+        showUnderGroundDFS.setVisible(visible);
+        buttonRight.setVisible(visible);
+        buttonRightAnimation.setVisible(visible);
+        buttonLeft.setVisible(visible);
+        buttonLeftAnimation.setVisible(visible);
+        reset.setVisible(visible);
+    }
+
+    private void SelectFile(boolean isSave) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(isSave ? "Sauvegarder le labyrinthe" : "Charger un labyrinthe");
-        fileChooser.getExtensionFilters().add(
-            new ExtensionFilter("Fichiers texte", "*.txt")
-        );
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Fichiers texte", "*.txt"));
         File saveDir = new File("src/saves");
         if (saveDir.exists()) {
-            fileChooser.setInitialDirectory(saveDir.getAbsoluteFile());
+            fileChooser.setInitialDirectory(saveDir);
         }
         File file = isSave ? fileChooser.showSaveDialog(null) : fileChooser.showOpenDialog(null);
         if (file != null) {
             if (isSave) {
-                SaveMazeManager.saveMaze(file,currentMaze);
+                SaveMazeManager.saveMaze(file, currentMaze);
             } else {
-               	currentMaze =  SaveMazeManager.loadMaze(file);
-		root.setCenter(currentMaze.getGridPane());
-                buttonBfs.setVisible(true); // le bouton devient visible après génération
-                buttonBfsAnimation.setVisible(true);
-                showUnderGroundBFS.setVisible(true);
+                currentMaze = SaveMazeManager.loadMaze(file);
+                root.setCenter(currentMaze.getGridPane());
+                setSolvingButtonsVisible(true);
             }
         }
     }
-  
-    
+
+    private void showAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
+
+    private void showNoSolution(int nbCases) {
+        showAlert("Aucune solution trouvée.");
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
