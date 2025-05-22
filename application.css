@@ -1,0 +1,55 @@
+.root {
+    -fx-background-color: #1e1e2f;
+    -fx-padding: 10;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+solving-panel.button {
+    -fx-background-color: #3b3b58;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 2, 0, 2, 2);
+}
+
+.button {
+    -fx-background-color: #3b3b58;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #4a4a70;
+}
+
+.text-field {
+    -fx-background-color: #2a2a40;
+    -fx-text-fill: white;
+    -fx-border-color: #6666aa;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+}
+
+.solving-panel {
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-background-color: #2a2a3d;
+    -fx-border-color: #5c5caa;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.top-controls {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
