@@ -1,8 +1,11 @@
 package application;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -35,12 +38,11 @@ public class Main extends Application {
     private final DFS dfs = new DFS();
     private final Right right = new Right();
     private final Left left = new Left();
-
-
     @Override
     public void start(Stage primaryStage) {
+    	
         root = new BorderPane();
-
+       
         // Top controls
         TextField widthField = new TextField();
         TextField heightField = new TextField();
@@ -62,22 +64,40 @@ public class Main extends Application {
         );
         topControls.getStyleClass().add("top-controls");
         root.setTop(topControls);
+        topControls.setAlignment(Pos.CENTER);
 
         // Right panel: solving buttons
         Label nbCaseTraite = new Label("Cases traitées: ");
         Label nbCasePath = new Label("Cases chemin: ");
         Label timeGeneration = new Label("Temps generation: ");
+        
+        VBox BFS =new VBox(new Label("BFS:"),buttonBfs, buttonBfsAnimation, showUnderGroundBFS);
+        BFS.getStyleClass().add("solving-panel");
+        
+        VBox DFS =new VBox(new Label("DFS:"),buttonDfs, buttonAnimationDfs, showUnderGroundDFS);
+        DFS.getStyleClass().add("solving-panel");
+        
+        VBox Right =new VBox(new Label("Right:"),buttonRight, buttonRightAnimation);
+        Right.getStyleClass().add("solving-panel");
+        
+        VBox Left =new VBox(new Label("Left:"),buttonLeft, buttonLeftAnimation);
+        Left.getStyleClass().add("solving-panel");
+        
         VBox solvingPanel = new VBox(
-                new Label("Résolutions:"),
-                buttonBfs, buttonBfsAnimation, showUnderGroundBFS,
-                buttonDfs, buttonAnimationDfs, showUnderGroundDFS,
-                buttonRight, buttonRightAnimation,
-                buttonLeft, buttonLeftAnimation,
-                reset, nbCaseTraite, nbCasePath,timeGeneration
+                BFS,
+                DFS,
+                Right,
+                Left      
         );
         solvingPanel.getStyleClass().add("solving-panel");
         root.setRight(solvingPanel);
+        
+        Region space= new Region();
+        VBox.setVgrow(space,Priority.ALWAYS);
 
+        VBox test =new VBox(reset, nbCaseTraite, nbCasePath,timeGeneration,space,saveMaze, loadMaze);
+        test.getStyleClass().add("solving-panel");
+        root.setLeft(test);
         // Cacher les boutons au démarrage
         setSolvingButtonsVisible(false);
 
@@ -289,7 +309,9 @@ public class Main extends Application {
 
             MazeGenerator newMaze = new MazeGenerator(height, width, perfect, progressive, speed, false, null);
             currentMaze = newMaze;
-            root.setCenter(currentMaze.getGridPane());
+            GridPane test1=currentMaze.getGridPane();
+            root.setCenter(test1);
+            test1.setAlignment(Pos.CENTER);
             setSolvingButtonsVisible(true);
         } catch (NumberFormatException ex) {
             System.err.println("Dimensions non valides.");

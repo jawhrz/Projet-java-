@@ -223,4 +223,3 @@ public class Left extends Resolution{
 	    	}
 	    }
 }
-

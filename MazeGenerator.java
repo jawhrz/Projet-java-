@@ -3,6 +3,8 @@ package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import java.util.*;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javafx.scene.image.Image;
 
 public class MazeGenerator {
     private final int rows;
@@ -32,6 +35,8 @@ public class MazeGenerator {
     private final Button[][] buttonGrid;
     private final int Speed;
     private final List<int[]> values;
+    
+    
     
     public MazeGenerator(int rows, int cols, boolean isPerfect, boolean isProgressive, int Speed,boolean isloaded,int[][] loadedMazeGrid) {
     	if (!isloaded) {
@@ -74,11 +79,7 @@ public class MazeGenerator {
         	buttonGrid[height-2][width-1].setStyle("-fx-background-color: white;");
        		buttonGrid[1][0].setStyle("-fx-background-color: green;");
 	        
-	            for (int i = 0; i < height; i++) {
-	                for (int j = 0; j < width; j++) {
-	                    System.out.println(mazeGrid[i][j]);
-	                }
-	            }
+	           
         } else {
             displayGrid(); // Si on charge une grille, il faut juste l’afficher
         }
@@ -265,8 +266,8 @@ public class MazeGenerator {
             for (int j = 0; j < width; j++) {
                 Button btn = new Button(); 
                 buttonGrid[i][j]=btn;
-                btn.setMinSize(600.0/height, 600.0/width);
-                btn.setMaxSize(600.0/height, 600.0/width);
+                btn.setMinSize(1200.0/(height+width),1200.0/(height+width));
+                btn.setMaxSize(1200.0/(height+width), 1200.0/(height+width));
                 colorButton(btn, mazeGrid[i][j]);
 
                 int x = i;
@@ -284,8 +285,8 @@ public class MazeGenerator {
     private void updateSingleButton(int i, int j) {
         Button btn = new Button();
         buttonGrid[i][j]=btn;
-        btn.setMinSize(600.0/height, 600.0/width);
-        btn.setMaxSize(600.0/height, 600.0/width);
+        btn.setMinSize(1200.0/(height+width), 1200.0/(height+width));
+        btn.setMaxSize(1200.0/(height+width), 1200.0/(height+width));
         colorButton(btn, mazeGrid[i][j]);
 
         int x = i;

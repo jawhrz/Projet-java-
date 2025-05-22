@@ -6,16 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-/**
- * Classe resérvé à la sauvegarde et au chargement d'un labyrinthe.
- * @author : Elyas Mensah
- */
 public class SaveMazeManager {
-    /** 
-     * Sauvegarde un labyrinthe dans un fichier texte.
-     * @param file        Le fichier dans lequel le labyrinthe sera sauvegardé.
-     * @param mazeToSave  L'objet MazeGenerator représentant le labyrinthe à sauvegarder.
-     */
+	
     public static void saveMaze(File file, MazeGenerator mazeToSave) {
     	int height = mazeToSave.getHeight();
     	int width = mazeToSave.getWidth();
@@ -34,11 +26,7 @@ public class SaveMazeManager {
             System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
         }
     }
-    /** 
-     * Charger un labyrinthe à partir d'un fichier texte.
-     * @param file        Le fichier dans lequel le labyrinthe sera sauvegardé.
-     * @return Un nouveau objet MazeGenerator construit à partir du labyrinthe chargé, ou null en cas d'erreur
-     */
+
     public static MazeGenerator loadMaze(File file) {
         try (Scanner scanner = new Scanner(file)) {
            int height = scanner.nextInt();
@@ -51,6 +39,7 @@ public class SaveMazeManager {
                }   
            }
            return new MazeGenerator(height,width,true, false, 0, true, mazeGrid);
+           //return new MazeGenerator(mazeGrid);
         } catch (IOException e) {
             System.err.println("Erreur lors du chargement : " + e.getMessage());
             return null;
