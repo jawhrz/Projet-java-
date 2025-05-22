@@ -1,3 +1,4 @@
+
 package application;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,10 +20,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe DFS - Implémente l'algorithme de parcours en profondeur (Depth-First Search)
+ * pour résoudre un labyrinthe et visualiser son exécution avec des animations.
+ * 
+ * @author Jawad Harizi
+ * @author Cherf Noam
+ */
+
 public class DFS extends ResolutionFS{
 	
 	int nbCase=0;
 	int nbPath=0;
+	
+	/**
+	 * Recherche les voisins valides (non-mur et dans les limites) d'une position donnée dans le labyrinthe.
+	 *
+	 * @param position La position actuelle sous forme de tableau [ligne, colonne].
+	 * @param maze Le générateur de labyrinthe.
+	 * @return Une liste de tableaux représentant les positions voisines accessibles.
+	 */
 	
 	public List<int[]> searchNeighbor(int[] position, MazeGenerator maze) {
 	    List<int[]> voisins = new ArrayList<>();
@@ -52,6 +69,12 @@ public class DFS extends ResolutionFS{
 	    return voisins;
 	}
 	
+	/**
+	 * Initialise la grille du labyrinthe en mettant à zéro toutes les cases accessibles.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
+	
 	public void initDistance(MazeGenerator maze) {
 		int height=maze.getHeight();
 		int width=maze.getWidth();
@@ -64,6 +87,13 @@ public class DFS extends ResolutionFS{
                }
         }
 	}
+	
+	/**
+	 * Exécute l'algorithme de recherche en profondeur (DFS) pour explorer le labyrinthe.
+	 * Met à jour la grille avec les distances depuis le point de départ.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
 	
 	public void DFS(MazeGenerator maze) {
 		nbCase=1;
@@ -101,6 +131,13 @@ public class DFS extends ResolutionFS{
 	        }
 	    }
 	}
+	
+	/**
+	 * Exécute une version de DFS avec animation de l'exploration du labyrinthe.
+	 * Colore progressivement les cases explorées en rouge.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
 	
 	public void resDistanceSlowDFS(MazeGenerator maze) {
 		List<Button> pathButtons = new ArrayList<>();
@@ -158,6 +195,14 @@ public class DFS extends ResolutionFS{
 	    timeline.play();
 	    
 	}
+	
+	/**
+	 * Met en surbrillance le chemin trouvé entre la sortie et l'entrée du labyrinthe
+	 * après l'exécution de l'algorithme, sans animation.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
+	
 	public void highlightPath(MazeGenerator maze) {
 	    int[][] grid = maze.getMazeGrid();
         Button[][] buttonGrid=maze.getButtonGrid();
@@ -186,6 +231,13 @@ public class DFS extends ResolutionFS{
 	        }
 	    }
 	}
+	
+	/**
+	 * Anime la mise en surbrillance du chemin trouvé, en vert, de manière progressive.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
+	
 	
 	public void highlightPathAnimation(MazeGenerator maze) {
 	    int[][] grid = maze.getMazeGrid();
@@ -229,6 +281,12 @@ public class DFS extends ResolutionFS{
 	  
 	    timeline.play();
 	}
+	
+	/**
+	 * Réinitialise l'état visuel et logique du labyrinthe à sa configuration d'origine.
+	 *
+	 * @param maze Le générateur de labyrinthe.
+	 */
 
 	public void reset(MazeGenerator maze) {
 		int[][] mazeGrid= maze.getMazeGrid();
@@ -246,6 +304,14 @@ public class DFS extends ResolutionFS{
 		}
 		
 	}
+	
+	/**
+	 * Vérifie si une position (int[]) est déjà contenue dans une liste de positions.
+	 *
+	 * @param liste La liste de positions déjà visitées.
+	 * @param element La position à vérifier.
+	 * @return true si la position est déjà dans la liste, false sinon.
+	 */
 	
 	 public boolean contains(List<int[]> liste, int[] element) {
 	    	boolean dejaVu = false;
