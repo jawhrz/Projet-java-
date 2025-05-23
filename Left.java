@@ -202,7 +202,7 @@ public class Left extends Resolution {
         Timeline timeline = new Timeline();
         for (int k = 0; k < dejavu.size(); k++) {
             Button btn = buttonGrid[dejavu.get(k)[0]][dejavu.get(k)[1]];
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(30 * k), e -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
                 btn.setStyle("-fx-background-color: green;");
             });
             timeline.getKeyFrames().add(keyFrame);
