@@ -184,7 +184,7 @@ public class DFS extends ResolutionFS{
 	    Timeline timeline = new Timeline();
 	    for (int k = 0; k < pathButtons.size(); k++) {
 	        Button btn = pathButtons.get(k);
-	        KeyFrame keyFrame = new KeyFrame(Duration.millis(30 * k), e -> {
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
 	            btn.setStyle("-fx-background-color: red;");
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
@@ -240,7 +240,9 @@ public class DFS extends ResolutionFS{
 	
 	
 	public void highlightPathAnimation(MazeGenerator maze) {
-	    int[][] grid = maze.getMazeGrid();
+	int[][] grid = maze.getMazeGrid();
+	int height = maze.getHeight();
+	int width = maze.getWidth();
         Button[][] buttonGrid=maze.getButtonGrid();
         List<Button> pathButtons = new ArrayList<>();
         nbPath=1;
@@ -272,7 +274,7 @@ public class DFS extends ResolutionFS{
 	    Timeline timeline = new Timeline();
 	    for (int k = 0; k < pathButtons.size(); k++) {
 	        Button btn = pathButtons.get(k);
-	        KeyFrame keyFrame = new KeyFrame(Duration.millis(30 * k), e -> {
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
 	            btn.setStyle("-fx-background-color: green;");
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
