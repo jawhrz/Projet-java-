@@ -6,15 +6,15 @@
     -fx-padding: 10;
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
 
 .label {
     -fx-text-fill: white;
 }
 
-solving-panel.button {
+.solving-panel.button {
     -fx-text-fill: white;
-    -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-padding: 8 14;
     -fx-cursor: hand;

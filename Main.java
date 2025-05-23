@@ -6,14 +6,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+import javafx.scene.text.Font;
+import javafx.scene.text.Font;
 import java.io.File;
 import java.util.List;
-
+/**
+ * Classe principale de l'application JavaFX permettant de générer et résoudre des labyrinthes.
+ * L'application permet de générer des labyrinthes parfaits ou imparfaits,
+ * de les sauvegarder, de les charger, et de les résoudre via différents algorithmes :
+ * BFS, DFS, parcours par la droite ou par la gauche, avec ou sans animation.
+ * 
+ * @author Cherf Noam Harizi Jawad Mensah Elyas
+ */
 public class Main extends Application {
 
     Button buttonBfs = new Button("BFS");
@@ -31,13 +40,19 @@ public class Main extends Application {
     Button buttonLeftAnimation = new Button("Left pas à pas");
 
     Button reset = new Button("Reset");
-
     private BorderPane root;
     private MazeGenerator currentMaze;
     private final BFS bfs = new BFS();
     private final DFS dfs = new DFS();
     private final Right right = new Right();
     private final Left left = new Left();
+    /**
+     * Point d'entrée de l'application JavaFX.
+     * Initialise l'interface utilisateur et configure les événements pour la génération
+     * et la résolution de labyrinthes.
+     *
+     * @param primaryStage La fenêtre principale de l'application.
+     */
     @Override
     public void start(Stage primaryStage) {
     	
@@ -126,7 +141,7 @@ public class Main extends Application {
                     nbCaseTraite.setText("Cases traitées: " + bfs.nbCase);
                     nbCasePath.setText("Cases chemin: " + bfs.nbPath);
                 } else {
-                    showNoSolution(bfs.nbCase);
+                    showNoSolution();
                 }
             }
         });
@@ -145,7 +160,7 @@ public class Main extends Application {
                     nbCaseTraite.setText("Cases traitées: " + bfs.nbCase);
                     nbCasePath.setText("Cases chemin: " + bfs.nbPath);
                 } else {
-                    showNoSolution(bfs.nbCase);
+                    showNoSolution();
                 }
             }
         });
@@ -179,7 +194,7 @@ public class Main extends Application {
                     nbCaseTraite.setText("Cases traitées: " + dfs.nbCase);
                     nbCasePath.setText("Cases chemin: " + dfs.nbPath);
                 } else {
-                    showNoSolution(dfs.nbCase);
+                    showNoSolution();
                 }
             }
         });
@@ -197,7 +212,7 @@ public class Main extends Application {
                     nbCaseTraite.setText("Cases traitées: " + dfs.nbCase);
                     nbCasePath.setText("Cases chemin: " + dfs.nbPath);
                 } else {
-                    showNoSolution(dfs.nbCase);
+                    showNoSolution();
                 }
             }
         });
@@ -230,7 +245,7 @@ public class Main extends Application {
                 nbCaseTraite.setText("Cases traitées: " + right.nbCase);
                 nbCasePath.setText("Cases chemin: " + right.nbPath);
             } else {
-                showNoSolution(right.nbCase);
+                showNoSolution();
             }
         });
 
@@ -247,7 +262,7 @@ public class Main extends Application {
                 nbCaseTraite.setText("Cases traitées: " + right.nbCase);
                 nbCasePath.setText("Cases chemin: " + right.nbPath);
             } else {
-                showNoSolution(right.nbCase);
+                showNoSolution();
             }
         });
         
@@ -264,7 +279,7 @@ public class Main extends Application {
                 nbCaseTraite.setText("Cases traitées: " + left.nbCase);
                 nbCasePath.setText("Cases chemin: " + left.nbPath);
             } else {
-                showNoSolution(left.nbCase);
+                showNoSolution();
             }
         });
 
@@ -281,20 +296,64 @@ public class Main extends Application {
                 nbCaseTraite.setText("Cases traitées: " + left.nbCase);
                 nbCasePath.setText("Cases chemin: " + left.nbPath);
             } else {
-                showNoSolution(left.nbCase);
+                showNoSolution();
             }
         });
 
         reset.setOnAction(e -> {
             if (currentMaze != null) currentMaze.reset(currentMaze);
         });
+        
+        
 
         Scene scene = new Scene(root, 1000, 700);
+        
+        scene.setOnKeyPressed(event -> {		
+            if (event.getCode() == KeyCode.B) {
+                buttonBfs.fire();
+            } else if (event.getCode() == KeyCode.F) {
+                reset.fire();
+            }
+            else if (event.getCode() == KeyCode.D) {
+                buttonDfs.fire();
+            }
+            else if (event.getCode() == KeyCode.R) {
+                buttonRight.fire();
+            }
+            else if (event.getCode() == KeyCode.L) {
+                buttonLeft.fire();
+            }
+            else if (event.getCode() == KeyCode.S) {
+                buttonLeft.fire();
+            }
+            else if (event.getCode() == KeyCode.C) {
+                buttonLeft.fire();
+            }
+            else if (event.getCode() == KeyCode.I) {
+            	imperfectFast.fire();
+            }
+            else if (event.getCode() == KeyCode.P) {
+            	perfectFast.fire();
+            }
+        });
+
+        
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        //Font.loadFont(getClass().getResourceAsStream("PressStart2P-Regular.ttf"), 7);
         primaryStage.setTitle("Génération de labyrinthe");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    /**
+     * Génère un labyrinthe selon les paramètres spécifiés dans les champs de texte.
+     *
+     * @param widthField  Champ contenant la largeur du labyrinthe.
+     * @param heightField Champ contenant la hauteur du labyrinthe.
+     * @param perfect     Indique si le labyrinthe doit être parfait (sans boucle).
+     * @param progressive Indique si la génération doit être animée pas à pas.
+     * @param speedField  Champ contenant la vitesse d'animation.
+     */
 
     private void generateMaze(TextField widthField, TextField heightField, boolean perfect, boolean progressive, TextField speedField) {
         try {
@@ -314,10 +373,14 @@ public class Main extends Application {
             test1.setAlignment(Pos.CENTER);
             setSolvingButtonsVisible(true);
         } catch (NumberFormatException ex) {
-            System.err.println("Dimensions non valides.");
+            showAlert("Dimensions non valides.");
         }
     }
-
+    /**
+     * Rend visible ou invisible les boutons de résolution.
+     *
+     * @param visible true pour les rendre visibles, false pour les cacher.
+     */
     private void setSolvingButtonsVisible(boolean visible) {
         buttonBfs.setVisible(visible);
         buttonBfsAnimation.setVisible(visible);
@@ -331,7 +394,11 @@ public class Main extends Application {
         buttonLeftAnimation.setVisible(visible);
         reset.setVisible(visible);
     }
-
+    /**
+     * Permet à l'utilisateur de sauvegarder ou charger un labyrinthe via un sélecteur de fichiers.
+     *
+     * @param isSave true pour sauvegarder, false pour charger.
+     */
     private void SelectFile(boolean isSave) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(isSave ? "Sauvegarder le labyrinthe" : "Charger un labyrinthe");
@@ -346,12 +413,18 @@ public class Main extends Application {
                 SaveMazeManager.saveMaze(file, currentMaze);
             } else {
                 currentMaze = SaveMazeManager.loadMaze(file);
-                root.setCenter(currentMaze.getGridPane());
+                GridPane test=currentMaze.getGridPane();
+                root.setCenter(test);
+                test.setAlignment(Pos.CENTER);
                 setSolvingButtonsVisible(true);
             }
         }
     }
-
+    /**
+     * Affiche une alerte contenant un message d'information.
+     *
+     * @param text Le message à afficher.
+     */
     private void showAlert(String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
@@ -359,11 +432,17 @@ public class Main extends Application {
         alert.setContentText(text);
         alert.showAndWait();
     }
-
-    private void showNoSolution(int nbCases) {
+    /**
+     * Affiche une alerte indiquant qu'aucune solution n'a été trouvée pour le labyrinthe.
+     */
+    private void showNoSolution() {
         showAlert("Aucune solution trouvée.");
     }
-
+    /**
+     * Méthode main classique pour lancer l'application JavaFX.
+     *
+     * @param args arguments de la ligne de commande.
+     */
     public static void main(String[] args) {
         launch(args);
     }

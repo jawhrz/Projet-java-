@@ -150,7 +150,7 @@ public class BFS extends ResolutionFS {
         for (int k = 0; k < pathButtons.size(); k++) {
             Button btn = pathButtons.get(k);
             KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
-                btn.setStyle("-fx-background-color: red;");
+                btn.setStyle("-fx-background-color: da4c80;");
             });
             timeline.getKeyFrames().add(keyFrame);
         }
