@@ -57,7 +57,7 @@ public class Main extends Application {
         HBox topControls = new HBox(10,
                 new Label("Largeur:"), widthField,
                 new Label("Hauteur:"), heightField,
-                new Label("Vitesse:"), speedField,
+                new Label("Temps de génération:"), speedField,
                 perfectFast, perfectSlow,
                 imperfectFast, imperfectSlow,
                 saveMaze, loadMaze
