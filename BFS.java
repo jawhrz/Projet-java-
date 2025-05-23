@@ -149,7 +149,7 @@ public class BFS extends ResolutionFS {
         Timeline timeline = new Timeline();
         for (int k = 0; k < pathButtons.size(); k++) {
             Button btn = pathButtons.get(k);
-            KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.millis((1700 * k)/(height+width)), e -> {
                 btn.setStyle("-fx-background-color: da4c80;");
             });
             timeline.getKeyFrames().add(keyFrame);
@@ -230,7 +230,7 @@ public class BFS extends ResolutionFS {
         Timeline timeline = new Timeline();
         for (int k = 0; k < pathButtons.size(); k++) {
             Button btn = pathButtons.get(k);
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(500 * k/(height+width)), e -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(1700 * k/(height+width)), e -> {
                 btn.setStyle("-fx-background-color: green;");
             });
             timeline.getKeyFrames().add(keyFrame);

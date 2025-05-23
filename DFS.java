@@ -184,7 +184,7 @@ public class DFS extends ResolutionFS{
 	    Timeline timeline = new Timeline();
 	    for (int k = 0; k < pathButtons.size(); k++) {
 	        Button btn = pathButtons.get(k);
-	        KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis((4000 * k)/(height+width)), e -> {
 	            btn.setStyle("-fx-background-color: red;");
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
@@ -274,7 +274,7 @@ public class DFS extends ResolutionFS{
 	    Timeline timeline = new Timeline();
 	    for (int k = 0; k < pathButtons.size(); k++) {
 	        Button btn = pathButtons.get(k);
-	        KeyFrame keyFrame = new KeyFrame(Duration.millis((500 * k)/(height+width)), e -> {
+	        KeyFrame keyFrame = new KeyFrame(Duration.millis((4000 * k)/(height+width)), e -> {
 	            btn.setStyle("-fx-background-color: green;");
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
