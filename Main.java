@@ -21,7 +21,7 @@ import java.util.List;
  * de les sauvegarder, de les charger, et de les résoudre via différents algorithmes :
  * BFS, DFS, parcours par la droite ou par la gauche, avec ou sans animation.
  * 
- * @author Cherf Noam Harizi Jawad Mensah Elyas
+ * @author Cherf Noam Harizi Jawad Mensah Elyas Chikhaoui Zakaria Zalegh Riyad
  */
 public class Main extends Application {
 
